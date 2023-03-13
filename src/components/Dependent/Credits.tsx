@@ -3,9 +3,10 @@ import { Image, Text, TouchableOpacity, View } from 'enmity/components';
 import { bulk, filters } from 'enmity/metro';
 import { Constants, React, StyleSheet } from 'enmity/metro/common';
 import { Miscellaneous } from '../../common';
+import stylesheetStyles from '../../common/StyleSheet';
 
 interface Props {
-    manifest: object;
+    manifest: typeof import("../../../manifest.json");
 }
 
 // @ts-ignore
@@ -27,11 +28,10 @@ const styles = StyleSheet.createThemedStyleSheet({
     container: {
         paddingTop: 30,
         paddingLeft: 20,
-        marginBottom: -5,
         flexDirection: "row"
     },
     // styles for the container inside of the container, which has the main text elements
-    text_container: {
+    textContainer: {
         paddingLeft: 15,
         paddingTop: 5,
         flexDirection: 'column',
@@ -44,7 +44,7 @@ const styles = StyleSheet.createThemedStyleSheet({
         borderRadius: 10
     },
     // global text styling, shared between both header and subheader
-    main_text: {
+    mainText: {
         opacity: 0.975,
         letterSpacing: 0.25,
         fontFamily: Constants.Fonts.DISPLAY_NORMAL
@@ -57,7 +57,7 @@ const styles = StyleSheet.createThemedStyleSheet({
         letterSpacing: 0.25
     },
     // main subheader styling
-    sub_header: {
+    subHeader: {
         color: Constants.ThemeColorMap.HEADER_SECONDARY,
         opacity: 0.975,
         fontSize: 12.75,
@@ -90,83 +90,66 @@ export default ({ manifest }: Props) => {
     const onPress = () => { Router.openURL("https://spin.rip/") };
     const animatedScaleStyle = { transform: [{ scale: animatedButtonScale }] } // main actual styling for the scale
 
-    return <>
-        <View style={styles.container}>
-            <TouchableOpacity
-                // used a TouchableOpacity to add opacity changes to the icon upon any press
-                onPress={onPress} // opens spin's personal site
-                onPressIn={onPressIn} // in animation
-                onPressOut={onPressOut} // out animation
-            >
-                <Animated.View style={[animatedScaleStyle]} /* uses Animated.View to apply new animations to the image */>
-                    <Image
-                        style={[styles.image]}
-                        source={{
-                            // image used for the icon, source takes either a require() or a uri
-                            uri: 'https://cdn.spin.rip/r/l9uevwe4ia0.jpg',
-                        }}
-                    />
-                </Animated.View>
+    return <View style={styles.container}>
+        <TouchableOpacity
+            // used a TouchableOpacity to add opacity changes to the icon upon any press
+            onPress={onPress} // opens spin's personal site
+            onPressIn={onPressIn} // in animation
+            onPressOut={onPressOut} // out animation
+        >
+            <Animated.View style={[animatedScaleStyle]} /* uses Animated.View to apply new animations to the image */>
+                <Image
+                    style={[styles.image]}
+                    source={{
+                        // image used for the icon, source takes either a require() or a uri
+                        uri: 'https://cdn.spin.rip/r/l9uevwe4ia0.jpg',
+                    }}
+                />
+            </Animated.View>
+        </TouchableOpacity>
+        <View style={styles.textContainer /* text only container */}>
+            <TouchableOpacity onPress={() => { Router.openURL(manifest['sourceUrl']) }}>
+                <Text style={[styles.mainText, styles.header]} /* main title text, in this case its "Dislate" */>
+                    {manifest['name']} {/* the plugin name in manifest.json */}
+                </Text>
             </TouchableOpacity>
-            <View style={styles.text_container /* text only container */}>
-                <TouchableOpacity onPress={() => { Router.openURL(manifest['sourceUrl']) }}>
-                    <Text style={[styles.main_text, styles.header]} /* main title text, in this case its "Dislate" */>
-                        {manifest['name']} {/* the plugin name in manifest.json */}
+            <View style={{ flexDirection: 'row' } /* makes the elements render inline */}>
+                <Text style={[styles.mainText, styles.subHeader]}>
+                    A plugin by
+                </Text>
+                {manifest.authors.map((author, index: number, authorsArray: any[]) => { 
+                    return <TouchableOpacity onPress={(): void => Router.openURL(author.profile)}> 
+                        <Text 
+                            style={[styles.mainText, stylesheetStyles.safeText, styles.subHeader, {
+                                paddingLeft: 4,
+                                fontFamily: Constants.Fonts.DISPLAY_BOLD,
+                                flexDirection: 'row'
+                        }]}>
+                                {author.name}{index < (authorsArray.length - 1) ? "," : null}
+                        </Text>
+                    </TouchableOpacity>
+                })}
+            </View>
+            <View>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' } /* display text inline */}
+                    onPress={() => {
+                        Clipboard.setString(`**${manifest['name']}** v${manifest['version']}`);
+                        Miscellaneous.displayToast('plugin name and version', "clipboard");
+                    }} // copy the debug info from utility function to clipboard
+                >
+                    <Text style={[styles.mainText, styles.subHeader]}>
+                        Version:
+                    </Text>
+                    <Text
+                        style={[styles.mainText, styles.subHeader, {
+                            paddingLeft: 4,
+                            fontFamily: Constants.Fonts.DISPLAY_BOLD
+                        }]} >
+                        {manifest['version']} {/* the version in manifest.json */}
                     </Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: 'row' } /* makes the elements render inline */}>
-                    <Text style={[styles.main_text, styles.sub_header]}>
-                        A plugin by
-                    </Text>
-                    <TouchableOpacity onPress={() => { Router.openURL("https://spin.rip/") }}>
-                        <Text
-                            // opens spin's personal website
-                            style={[styles.main_text, styles.sub_header, {
-                                paddingLeft: 4,
-                                fontFamily: Constants.Fonts.DISPLAY_BOLD
-                            }]}
-                        >
-                            {manifest['authors'][0]['name']}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ flexDirection: 'row' } /* makes the elements render inline */}>
-                    <Text style={[styles.main_text, styles.sub_header]}>
-                        Settings page by
-                    </Text>
-                    <TouchableOpacity onPress={() => { Router.openURL("https://github.com/acquitelol/") }}>
-                        <Text
-                            // opens acquite's github account externally
-                            style={[styles.main_text, styles.sub_header, {
-                                paddingLeft: 4,
-                                fontFamily: Constants.Fonts.DISPLAY_BOLD
-                            }]}
-                        >
-                            {"Rosie<3"}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        style={{ flexDirection: 'row' } /* display text inline */}
-                        onPress={() => {
-                            Clipboard.setString(`**${manifest['name']}** v${manifest['version']}`);
-                            Miscellaneous.displayToast('plugin name and version', "clipboard");
-                        }} // copy the debug info from utility function to clipboard
-                    >
-                        <Text style={[styles.main_text, styles.sub_header]}>
-                            Version:
-                        </Text>
-                        <Text
-                            style={[styles.main_text, styles.sub_header, {
-                                paddingLeft: 4,
-                                fontFamily: Constants.Fonts.DISPLAY_BOLD
-                            }]} >
-                            {manifest['version']} {/* the version in manifest.json */}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </View>
-    </>
+    </View>
 }
