@@ -5,14 +5,11 @@ import { Constants, React, StyleSheet } from 'enmity/metro/common';
 import { Miscellaneous } from '../../common';
 import stylesheetStyles from '../../common/StyleSheet';
 
-interface Props {
-    manifest: typeof import("../../../manifest.json");
-}
-
 // @ts-ignore
 const Animated = window.enmity.modules.common.Components.General.Animated
 // this is the main 'animated' component of react native, for some reason its not exported in enmity components 
 // so i had to manually import it and make ts ignore it
+import { CreditsProps } from '../../common/types';
 
 // main declaration of modules being altered by the plugin
 const [
@@ -64,7 +61,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     }
 }); // main stylesheet
 
-export default ({ manifest }: Props) => {
+export default ({ manifest }: CreditsProps) => {
     // uses React.useRef() to bind the value to the button
     const animatedButtonScale = React.useRef(new Animated.Value(1)).current // no scale initially
 

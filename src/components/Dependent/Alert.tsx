@@ -3,17 +3,9 @@ import { FormInput, Text, View } from "enmity/components";
 import { Dialog, React, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
 import styles from "../../common/StyleSheet";
+import { ShowAlert } from '../../common/types';
 
-interface ShowAlertProps {
-  title: string;
-  userID: string;
-  confirmText?: string;
-  onConfirm: Function;
-  existing?: string;
-  placeholder?: string;
-}
-
-export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, existing, placeholder }: ShowAlertProps) => {
+export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, existing, placeholder }: ShowAlert) => {
   const User = Users.getUser(userID)
 
   // dialogs can take `children` or `body` but not both.

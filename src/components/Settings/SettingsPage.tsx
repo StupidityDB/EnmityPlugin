@@ -1,5 +1,4 @@
 // main imports of elements and dependencies
-import { SettingsStore } from 'enmity/api/settings';
 import { FormDivider, FormRow, ScrollView, View, Text } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
 import { Constants, React, StyleSheet } from 'enmity/metro/common';
@@ -7,15 +6,8 @@ import Credits from '../Dependent/Credits';
 import { Updater, Icons } from '../../common';
 import SectionWrapper from '../Wrappers/SectionWrapper';
 import stylesheetStyles from '../../common/StyleSheet';
+import { SettingsProps } from '../../common/types';
 
-// main settingsStore and manifest interface
-interface SettingsProps {
-  settings: SettingsStore;
-  manifest: typeof import("../../../manifest.json");
-  children?: any;
-};
-
-// main declaration of modules being altered by the plugin
 const Router = getByProps("openURL", "transitionToGuild");
 
 // icon and styles

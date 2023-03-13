@@ -2,7 +2,7 @@ import { Image, Text, TouchableOpacity, View, FormRow } from "enmity/components"
 import { bulk, filters } from "enmity/metro";
 import { Profiles, React, Users } from 'enmity/metro/common';
 import styles from "../../common/StyleSheet";
-import { Review } from "../../common/types";
+import { Review, ReviewProps } from "../../common/types";
 import { Toasts } from 'enmity/metro/common';
 import { Icons } from '../../common';
 
@@ -13,11 +13,6 @@ const [
   filters.byProps("ProfileGradientCard"),
   filters.byProps("fetchProfile")
 );
-
-interface ReviewProps {
-  review: Review;
-  onSubmit: Function;
-}
 
 export default ({ review, onSubmit }: ReviewProps) => {
   const [formattedTime, setFormattedTime] = React.useState<string>();

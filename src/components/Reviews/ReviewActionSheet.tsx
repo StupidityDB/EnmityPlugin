@@ -6,7 +6,7 @@ import { Icons } from "../../common";
 import Button from "../Dependent/Button";
 import { canDeleteReview, deleteReview, reportReview } from '../../common/RDBAPI';
 import Review from './Review';
-import { Review as ReviewType } from '../../common/types';
+import { ReviewActionSheetProps } from '../../common/types';
 
 const ActionSheet = (getModule(x => x.default?.render?.name == "ActionSheet") ?? { default: { render: false } }).default.render;
 const BottomSheetScrollView = getByProps("BottomSheetScrollView").BottomSheetScrollView;
@@ -17,13 +17,6 @@ export function renderActionSheet(component: any, props: { [key: string]: any })
   ActionSheet
     ? LazyActionSheet?.openLazy(new Promise(r => r({ default: component })), "ReviewActionSheet", props)
     : Toasts.open({ content: "You cannot open ActionSheets on this version! Upgrade to 163+", source: Icons.Failed })
-}
-
-interface ReviewActionSheetProps {
-  onConfirm: Function;
-  review: ReviewType;
-  currentUserID: string;
-  admins: string[]
 }
 
 export default function ReviewActionSheet({ onConfirm, review, currentUserID, admins }: ReviewActionSheetProps) {

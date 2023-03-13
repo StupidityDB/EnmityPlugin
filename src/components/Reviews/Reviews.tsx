@@ -10,15 +10,9 @@ import { addReview, getReviews } from '../../common/RDBAPI';
 import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 import styles from "../../common/StyleSheet";
-import { Review as ReviewType } from '../../common/types';
+import { Review as ReviewType, ReviewsSectionProps } from '../../common/types';
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
-
-interface ReviewsSectionProps {
-  userID: string;
-  currentUserID: string;
-  admins: string[]
-}
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
   const [reviews, setReviews] = React.useState<Array<ReviewType>>();

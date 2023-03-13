@@ -1,5 +1,6 @@
 import { View, Text } from "enmity/components"
 import { Constants, React, StyleSheet } from "enmity/metro/common"
+import { SectionWrapperProps } from "../../common/types";
 
 const styles = StyleSheet.createThemedStyleSheet({
     text: {
@@ -12,12 +13,6 @@ const styles = StyleSheet.createThemedStyleSheet({
         fontSize: 12
     },
 });
-
-interface SectionWrapperProps {
-    label: string, 
-    children?: any, 
-    style?: { [key: string]: any }
-}
 
 export default ({ label, children, style }: SectionWrapperProps) => {
     return <View style={[style, {marginTop: 10}]}>
