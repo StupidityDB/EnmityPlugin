@@ -1,8 +1,8 @@
 import { get, set } from "enmity/api/settings";
 import { FormInput, Text, View } from "enmity/components";
 import { Dialog, React, Users } from "enmity/metro/common";
-import manifest from "../../manifest.json";
-import styles from "./StyleSheet";
+import manifest from "../../../manifest.json";
+import styles from "../../common/StyleSheet";
 
 interface ShowAlertProps {
   title: string;

@@ -1,4 +1,5 @@
 import { Constants, StyleSheet } from "enmity/metro/common";
+import { Miscellaneous } from ".";
 
 // the size of the author text, and the profile pictures, inside of a singular review. this is a constant so they all update simultaneously.
 const AUTHOR_SIZE = 18;
@@ -35,6 +36,12 @@ const styles = StyleSheet.createThemedStyleSheet({
     flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  formrowContainer: {
+    width: '90%',
+    marginLeft: '5%',
+    borderRadius: 10,
+    ...Miscellaneous.shadow() /** @param shadow: Main shadow implementation */
   },
 
   // styles for button

@@ -1,118 +1,118 @@
-// Dependencies used in the script
-import { reload } from "enmity/api/native";
-import { getByProps } from 'enmity/metro';
-import { Dialog, REST, Toasts } from "enmity/metro/common";
-import { Icons } from './icons';
+import { name, sourceUrl, version, build } from '../../manifest.json';
+import { Dialog } from 'enmity/metro/common';
+import { reload } from 'enmity/api/native';
+import tryCallback from './try_callback';
 
-const Router = getByProps('transitionToGuild');
+/**
+ * Checks if any updates are available.
+ * @returns {void void}
+ */
+async function checkForUpdates(): Promise<void> {
+    await tryCallback(async function () {
+        const url = `${sourceUrl}?${Math.floor(Math.random() * 1001)}.js`;
 
-interface Props {
-    manifest: object;
+        const res: Response = await fetch(url);
+        const content: string = await res.text();
+
+        /**
+         * Gets the external version and build from the repo.
+         * @param {string} externalVersion: The current latest version externally. Example: @arg {1.1.5}
+         * @param {string} externalBuild: The current latest build externally. Example: @arg {patch-1.2.8}. This would be then shortened into a simpler string: @arg {1.2.8}
+         */
+        const potentialExternalVersion = content.match(/\d+\.\d+\.\d+/g)
+        const potentialExternalBuild = content.match(/patch-\d+\.\d+\.\d+/)
+
+        if (!potentialExternalVersion && !potentialExternalBuild)
+            return failureUpdate(name, [version, build]);
+
+        const externalVersion = potentialExternalVersion && potentialExternalVersion[0];
+        const externalBuild = potentialExternalBuild && potentialExternalBuild[0]
+
+        if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
+        if (externalBuild && (externalBuild != build)) return showUpdateDialog(url, externalBuild.split("-")[1], "build");
+        return noUpdates(name, [version, build]);
+    }, [sourceUrl, version, build], name, 'checking if latest version at', 'the async check for updates callback');
 }
 
 /**
- * It gets the source of the plugin, gets the version and build from the source, and if the version or
- * build is not the same as the current one, it shows an update dialog
- * @param {object} manifest - the manifest of the plugin
- * @returns calls the show_update_dialog function if an update is available, otherwise calls the no_updates function
+ * Shows a dialog that a new update is a available
+ * @param {string} url: The url to update to the newer version
+ * @param {string} updateLabel: The new version/build label to display in the dialogs.
+ * @param {enum} updateType: The type of update, which is an @arg enum and has 2 states being @arg version and @arg build.
+ * @returns {void}
  */
-async function check_for_updates({ manifest }: Props) {
-    // get the plugin source
-    const url = `${manifest['sourceUrl']}?${Math.floor(Math.random() * 1001)}.js`
-
-    const res = await REST.get(url);
-    const content = await res.text;
-
-    // get the version and build from the source
-    let external_version = content.match(/\d\.\d\.\d+/g);
-    let external_build = content.match(/patch\-\d\.\d\.\d+/g)
-    if (!external_version || !external_build) return no_updates(manifest['name'], manifest['version']);
-
-    // set the versions to their index
-    external_version = external_version[0]
-    external_build = external_build[0]
-
-    /*
-    i dont need to match specific parts of the version, here are some tests~
-        -> version 1.1.6, latest is 1.1.9 (not the same so update)
-        -> version 1.1.7 latest is 1.3.2 (not the same so update)
-        -> version 1.2.5 latest is 1.2.5 (is the same so no update)
-    ~ theres no need to match for if the latest is higher than the current
-        because the latest will always be larger or equal to the current version
-    */
-
-    // if the version is not the current one, that means its newer, otherwise run the no update function
-    if (external_version != manifest['version']) return show_update_dialog(url, external_version, external_build.split('-')[1], manifest, false)
-    if (external_build != manifest['build']) return show_update_dialog(url, external_version, external_build.split('-')[1], manifest, true)
-    return no_updates(manifest['name'], manifest['version'])
-}
-
-/**
- * It shows a dialog to the user, and if the user confirms, it runs the install function to update the plugin
- * @param {string} url - The URL to the plugin's zip file
- * @param {string} version - The version of the plugin that is available.
- * @param {string} build - The build number of the plugin.
- * @param {object} manifest - the manifest of the plugin
- * @param {boolean} is_ghost_patch - Whether or not the update is a ghost patch.
- */
-const show_update_dialog = (url: string, version: string, build: string, manifest: object, is_ghost_patch: boolean) => {
-    // open a dialog to show that a new version is available
-    const type = is_ghost_patch ? build : version
+const showUpdateDialog = (url: string, updateLabel: string, updateType: string): void => {
     Dialog.show({
-        title: "Update found",
-        body: `A newer ${is_ghost_patch ? "build" : "version"} is available for ${manifest['name']}. ${is_ghost_patch ? `\nThe version will remain at ${version}, but the build will update to ${build}.` : ""}\nWould you like to install ${is_ghost_patch ? `build \`${build}\`` : `version \`${version}\``}  now?`,
-        confirmText: "Update",
-        cancelText: "Not now",
-
-        // run the install function
-        onConfirm: () => install_plugin(url, type, manifest, is_ghost_patch),
+        title: 'Update found',
+        body: `A newer ${updateType} is available for ${name}. ${
+            updateType == 'build' 
+                ? `\nThe version will remain at ${version}, but the build will update to ${updateLabel}.` 
+                : ''
+        }\nWould you like to install ${updateType} \`${updateLabel}\` now?`,
+        confirmText: 'Update',
+        cancelText: 'Not now',
+        onConfirm: (): Promise<void> => installPlugin(url, updateLabel, updateType),
     });
-}
+};
 
 /**
- * It logs the fact that you're on the latest version with both a toast and a console log
- * @param {string} name - The name of the plugin
- * @param {string} type - The type of update, either "major", "minor", or "patch"
+ * Opens a dialog showing that there are no updates available for @arg PronounDB.
+ * @param name: The name of the plugin, in this case its @arg PronounDB.
+ * @param { version, hash }: This is an array of both the latest version and latest build hash, which are displayed in the @arg Dialog.
+ * @returns {void}
  */
-const no_updates = (name: string, type: string) => {
-    // logs the fact that youre on the latest version with both a toast a
-    console.log(`[${name}] Plugin is on the latest version, which is ${type}`)
-    Toasts.open({ content: `${name} is on latest version (${type})`, source: Icons.Success });
-}
+const noUpdates = (name: string, [version, hash]: string[]): void => {
+    console.log(`[${name}] Plugin is on the latest update, which is version ${version} and build ${hash}`);
+    Dialog.show({
+        title: 'Already on latest',
+        body: `${name} is already updated to the latest version.\nVersion: \`${version}\`\nBuild: \`${hash}\``,
+        confirmText: 'Okay',
+    });
+};
 
 /**
- * It installs a plugin from a given url, and then shows a dialog to reload discord if the plugin was
- * successfully installed otherwise it shows a dialog to the user saying that the plugin failed to install
- * @param {string} url - The URL of the plugin to install
- * @param {string} type - The type of update, either "version" or "build"
- * @param {object} manifest - the manifest of the plugin
- * @param {boolean} is_ghost_patch - boolean
+ * Opens a dialog showing that there is a failure to check for updates.
+ * @param name: The name of the plugin, in this case its @arg PronounDB.
+ * @param { version, hash }: This is an array of both the latest version and latest build hash, which are displayed in the @arg Dialog.
+ * @returns {void}
  */
-async function install_plugin(url: string, type: string, manifest: object, is_ghost_patch: boolean) {
-    //@ts-ignore
-    window.enmity.plugins.installPlugin(url, ({ data }) => {
-        // as a callback, waits for a success of "installed-plugin" or "overriden-plugin"
-        // before showing the dialog to reload discord
-        data == "installed_plugin" || data == "overridden_plugin"
-            ? Dialog.show({
-                title: `Updated ${manifest['name']}`,
-                body: `Successfully updated to ${is_ghost_patch ? `build` : `version`} \`${type}\`. \nWould you like to reload Discord now?`,
-                confirmText: "Yep!",
-                cancelText: "Not now",
-                // reload discord from native function
-                onConfirm: () => { reload() },
-            })
-            : Dialog.show({
-                title: "Error",
-                body: `Something went wrong while updating ${manifest['name']}.`,
-                confirmText: "Report this issue",
-                cancelText: "Cancel",
-                onConfirm: () => {
-                    Router.openURL(`https://github.com/spinfal/enmity-plugins/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D%20${manifest['name']}%20Update%20Error%3A%20${!is_ghost_patch ? `v${type}` : `b${type}`}`);
-                }
-            });
-        // otherwise log an issue when updating to console ^^^
-    })
+const failureUpdate = (name: string, [version, hash]: string[]): void => {
+    console.log(`[${name}] Plugin failed to update to the latest version and build, remaining at ${version} and ${hash}`);
+    Dialog.show({
+        title: 'Failed',
+        body: `${name} to find a new version or build.\nThe current versions will remain as follows:\nVersion: \`${version}\`\nBuild: \`${hash}\``,
+        confirmText: 'Okay',
+    });
+};
+
+/**
+ * Install a plugin and open a new @arg Dialog asking to @arg reload Enmity.
+ * @param {string} url: The URL of the plugin to install.
+ * @param {string} type: The @arg version or @arg build which it has just updated to, provided when the function is called dynamically.
+ * @param {updateType} updateType: The type of update which is being installed, options are @arg version and @arg build updates.
+ * @returns {void}
+ */
+async function installPlugin(url: string, type: string, updateType: string): Promise<void> {
+    await tryCallback(async function() {
+        /**
+         * The main function to install a plugin, inside of Enmity. This function is not exported as a member in the Enmity library, so I have to manually import it.
+         * @param {string} url: The link which is used to install the plugin
+         * @param {string} data: The returned data which shows the state of the installation.
+         * @ts-ignore */
+        window.enmity.plugins.installPlugin(url, ({ data }) => {
+            data == 'installed_plugin' || data == 'overridden_plugin'
+                ? Dialog.show({
+                        title: `Updated ${name}`,
+                        body: `Successfully updated to ${updateType} \`${type}\`. \nWould you like to reload Discord now?`,
+                        confirmText: 'Reload',
+                        cancelText: 'Not now',
+                        onConfirm: (): void => reload(),
+                    })
+                : console.log(`[${name}] Plugin failed to update to ${updateType} ${type}.`);
+        });
+    }, [url, type, updateType], name, 'installing plugin at', 'new version available');
 }
 
-export { check_for_updates };
+export default {
+    checkForUpdates
+};

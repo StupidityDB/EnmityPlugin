@@ -1,6 +1,6 @@
 import { getIDByName } from 'enmity/api/assets';
 
-export const Icons = {
+export default {
   Debug: getIDByName('debug'),
   Retry: getIDByName('ic_message_retry'),
   Failed: getIDByName('Small'),

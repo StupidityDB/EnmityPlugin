@@ -2,7 +2,7 @@
 import { Image, Text, TouchableOpacity, View } from 'enmity/components';
 import { bulk, filters } from 'enmity/metro';
 import { Constants, React, StyleSheet } from 'enmity/metro/common';
-import { clipboard_toast } from './utils';
+import { Miscellaneous } from '../../common';
 
 interface Props {
     manifest: object;
@@ -18,7 +18,7 @@ const [
     Router, // used to open a url externally
     Clipboard, // used to copy the dl link to keyboard
 ] = bulk(
-    filters.byProps('transitionToGuild'),
+    filters.byProps('transitionToGuild', "openURL"),
     filters.byProps('setString'),
 );
 
@@ -151,7 +151,7 @@ export default ({ manifest }: Props) => {
                         style={{ flexDirection: 'row' } /* display text inline */}
                         onPress={() => {
                             Clipboard.setString(`**${manifest['name']}** v${manifest['version']}`);
-                            clipboard_toast('plugin name and version');
+                            Miscellaneous.displayToast('plugin name and version', "clipboard");
                         }} // copy the debug info from utility function to clipboard
                     >
                         <Text style={[styles.main_text, styles.sub_header]}>

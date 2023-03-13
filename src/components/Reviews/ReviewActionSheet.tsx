@@ -2,12 +2,11 @@
 import { View } from 'enmity/components';
 import { getByProps, getModule } from "enmity/metro";
 import { React, Toasts } from "enmity/metro/common";
-import { Icons } from "../common";
-import Button from "./Button";
-import { canDeleteReview, deleteReview, reportReview } from '../common/RDBAPI';
+import { Icons } from "../../common";
+import Button from "../Dependent/Button";
+import { canDeleteReview, deleteReview, reportReview } from '../../common/RDBAPI';
 import Review from './Review';
-import { ReviewContentProps } from './types';
-import { API_URL } from "../../manifest.json"
+import { ReviewContentProps } from '../../common/types';
 
 const ActionSheet = (getModule(x => x.default?.render?.name == "ActionSheet") ?? { default: { render: false } }).default.render;
 const BottomSheetScrollView = getByProps("BottomSheetScrollView").BottomSheetScrollView;

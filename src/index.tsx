@@ -1,15 +1,16 @@
 import { get, set } from "enmity/api/settings";
-import { FormDivider, FormInput, FormRow, FormSection } from "enmity/components";
+import { FormDivider, FormInput, FormRow, FormSection, View } from "enmity/components";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByProps } from "enmity/metro";
 import { React, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
-import SettingsPage from "./components/SettingsPage";
+import SettingsPage from "./components/Settings/SettingsPage";
 import { Icons } from "./common";
 import manifest from "../manifest.json";
-import Reviews from "./components/Reviews";
+import Reviews from "./components/Reviews/Reviews";
 import { showOAuth2Modal } from './common/RDBAPI';
+import styles from "./common/StyleSheet";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -62,24 +63,26 @@ const ReviewDB: Plugin = {
     return <SettingsPage manifest={manifest} settings={settings}>
       {/* @ts-ignore */}
       <FormSection title="Plugin Settings">
-        <FormRow
-          // @ts-ignore
-          label="Authenticate with ReviewDB"
-          subLabel="Open a modal to authenticate your account with the ReviewDB API."
-          trailing={FormRow.Arrow}
-          // @ts-ignore
-          leading={<FormRow.Icon source={Icons.Settings.Self} />}
-          onPress={() => showOAuth2Modal()}
-        />
-        <FormDivider />
-        <FormInput
-          placeholder="Your token goes here"
-          value={get(manifest.name, "rdbToken", "")}
-          onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value) 
-            ? set(manifest.name, "rdbToken", value.trim()) 
-            : set(manifest.name, "rdbToken", ""))}
-          title="ReviewDB Authentication Token"
-        />
+        <View style={styles.formrowContainer}>
+          <FormRow
+            // @ts-ignore
+            label="Authenticate with ReviewDB"
+            subLabel="Open a modal to authenticate your account with the ReviewDB API."
+            trailing={FormRow.Arrow}
+            // @ts-ignore
+            leading={<FormRow.Icon source={Icons.Settings.Self} />}
+            onPress={() => showOAuth2Modal()}
+          />
+          <FormDivider />
+          <FormInput
+            placeholder="Your token goes here"
+            value={get(manifest.name, "rdbToken", "")}
+            onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value) 
+              ? set(manifest.name, "rdbToken", value.trim()) 
+              : set(manifest.name, "rdbToken", ""))}
+            title="ReviewDB Authentication Token"
+          />
+        </View>
       </FormSection>
     </SettingsPage>
   },

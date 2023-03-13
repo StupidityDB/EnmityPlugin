@@ -1,7 +1,7 @@
 import { getIDByName } from 'enmity/api/assets';
 import { FormRow, Text, TouchableOpacity, View } from "enmity/components";
 import { React } from "enmity/metro/common";
-import styles from "./StyleSheet";
+import styles from "../../common/StyleSheet";
 
 interface ButtonProps {
   text: string;

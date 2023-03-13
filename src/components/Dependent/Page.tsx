@@ -1,6 +1,6 @@
 import { React, Navigation, NavigationNative, NavigationStack, Constants } from 'enmity/metro/common';
 import { TouchableOpacity, Text, View } from 'enmity/components';
-import styles from './StyleSheet';
+import styles from '../../common/StyleSheet';
 const PageNavigator = NavigationStack.createStackNavigator();
 
 export default ({ component = View } = {}) => {

@@ -2,15 +2,15 @@ import { get } from "enmity/api/settings";
 import { Text, View } from 'enmity/components';
 import { getByProps } from "enmity/metro";
 import { React, Toasts, Users } from "enmity/metro/common";
-import { Icons } from "../common";
-import manifest from "../../manifest.json";
-import showAlert from "./Alert";
-import Button from "./Button";
-import { addReview, getReviews } from '../common/RDBAPI';
+import { Icons } from "../../common";
+import manifest from "../../../manifest.json";
+import showAlert from "../Dependent/Alert";
+import Button from "../Dependent/Button";
+import { addReview, getReviews } from '../../common/RDBAPI';
 import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
-import styles from "./StyleSheet";
-import { ReviewContentProps } from './types';
+import styles from "../../common/StyleSheet";
+import { ReviewContentProps } from '../../common/types';
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 
