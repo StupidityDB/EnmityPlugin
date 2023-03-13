@@ -1,28 +1,27 @@
 // main imports of elements and dependencies
 import { SettingsStore } from 'enmity/api/settings';
-import { FormDivider, FormRow, FormSection, ScrollView, View } from 'enmity/components';
+import { FormDivider, FormRow, ScrollView, View, Text } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
 import { Constants, React, StyleSheet } from 'enmity/metro/common';
 import Credits from '../Dependent/Credits';
 import { Updater, Icons } from '../../common';
+import SectionWrapper from '../Wrappers/SectionWrapper';
+import stylesheetStyles from '../../common/StyleSheet';
 
 // main settingsStore and manifest interface
 interface SettingsProps {
   settings: SettingsStore;
-  manifest: object;
+  manifest: typeof import("../../../manifest.json");
   children?: any;
-}
+};
 
 // main declaration of modules being altered by the plugin
-const Router = getByProps("openURL", "transitionToGuild")
+const Router = getByProps("openURL", "transitionToGuild");
 
 // icon and styles
 const styles = StyleSheet.createThemedStyleSheet({
-  bottom_padding: {
-    paddingBottom: 25
-  },
   icon: {
-    color: Constants.ThemeColorMap.INTERACTIVE_NORMAL
+    color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
   },
   item: {
     color: Constants.ThemeColorMap.TEXT_MUTED
@@ -30,16 +29,24 @@ const styles = StyleSheet.createThemedStyleSheet({
   text_container: {
     display: 'flex',
     flexDirection: 'column'
-  }
+  },
+  subheaderText: {
+    color: Constants.ThemeColorMap.HEADER_SECONDARY,
+    textAlign: 'center',
+    margin: 10,
+    marginBottom: 50,
+    letterSpacing: 0.25,
+    fontFamily: Constants.Fonts.PRIMARY_BOLD,
+    fontSize: 14
+ },
 }); // main stylesheet
 
 export default ({ manifest, children }: SettingsProps) => {
   return <ScrollView>
     <Credits manifest={manifest} /* main credits gui, created from scratch exclusively for dislate */ />
     {children}
-    {/* @ts-ignore */}
-    <FormSection title="Source">
-      <View style={styles.formrowContainer}>
+    <SectionWrapper label="Source">
+      <View style={stylesheetStyles.formrowContainer}>
         <FormRow
           /* @ts-ignore */
           label="Check for Updates"
@@ -64,11 +71,9 @@ export default ({ manifest, children }: SettingsProps) => {
           }}
         />
       </View>
-    </FormSection>
-    {/* @ts-ignore */}
-    <FormRow style={styles.bottom_padding} label={
-      `Version: ${manifest['version']}
-Build: ${(manifest['build']).split('-')[1]}`
-    } />
+    </SectionWrapper>
+    <Text style={styles.subheaderText}>
+      {`Version: (${manifest.version}) Build: (${manifest.build?.split("-")[1]})`}
+    </Text>
   </ScrollView>
 };

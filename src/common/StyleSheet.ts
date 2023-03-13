@@ -41,6 +41,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     width: '90%',
     marginLeft: '5%',
     borderRadius: 10,
+    backgroundColor: Constants.ThemeColorMap.BACKGROUND_MOBILE_SECONDARY,
     ...Miscellaneous.shadow() /** @param shadow: Main shadow implementation */
   },
 
