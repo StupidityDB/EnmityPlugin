@@ -20,11 +20,6 @@ interface SectionWrapperProps {
     style?: { [key: string]: any }
 }
 
-/**
- * Wrapper for any components which displays them in a section with a label
- * @param {string} label: The label for the wrapper, which will be displayed above the content inside of the component.
- * @param {TSX Fragment} component: The component to render inside of the @arg View.
- */
 export default ({ label, children, style }: SectionWrapperProps) => {
     return <View style={[style, {marginTop: 10}]}>
         <Text style={[styles.text, styles.optionText]}>

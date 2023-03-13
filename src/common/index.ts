@@ -8,14 +8,6 @@
 import Miscellaneous from './misc';
 
 /**
- * @param ArrayImplementations: Main Custom Array Manipulation Implementations class which contains a bunch of static methods defined below
- * 
- * @param insertItem: Adds an item into an array at a given index.
- * @param mapItem: Loops through an array and executes a callback for each iteration, then concatenates the result of that callback to a new array. This returns a mapped array.
- */
-import ArrayImplementations from './array_methods';
-
-/**
  * @param tryCallback: Allows a function to be nested as a callback with a function label and optional call label.
  */
 import tryCallback from "./try_callback";
@@ -37,7 +29,6 @@ import Updater from "./update";
  */
 export {
     Miscellaneous,
-    ArrayImplementations,
     tryCallback,
     Icons,
     Updater

@@ -3,10 +3,6 @@ import { Dialog } from 'enmity/metro/common';
 import { reload } from 'enmity/api/native';
 import tryCallback from './try_callback';
 
-/**
- * Checks if any updates are available.
- * @returns {void void}
- */
 async function checkForUpdates(): Promise<void> {
     await tryCallback(async function () {
         const url = `${links.source}?${Math.floor(Math.random() * 1001)}.js`;
@@ -14,11 +10,6 @@ async function checkForUpdates(): Promise<void> {
         const res: Response = await fetch(url);
         const content: string = await res.text();
 
-        /**
-         * Gets the external version and build from the repo.
-         * @param {string} externalVersion: The current latest version externally. Example: @arg {1.1.5}
-         * @param {string} externalBuild: The current latest build externally. Example: @arg {patch-1.2.8}. This would be then shortened into a simpler string: @arg {1.2.8}
-         */
         const potentialExternalVersion = content.match(/\d+\.\d+\.\d+/g)
         const potentialExternalBuild = content.match(/patch-\d+\.\d+\.\d+/)
 
@@ -34,13 +25,6 @@ async function checkForUpdates(): Promise<void> {
     }, [links, version, build], name, 'checking if latest version at', 'the async check for updates callback');
 }
 
-/**
- * Shows a dialog that a new update is a available
- * @param {string} url: The url to update to the newer version
- * @param {string} updateLabel: The new version/build label to display in the dialogs.
- * @param {enum} updateType: The type of update, which is an @arg enum and has 2 states being @arg version and @arg build.
- * @returns {void}
- */
 const showUpdateDialog = (url: string, updateLabel: string, updateType: string): void => {
     Dialog.show({
         title: 'Update found',
@@ -55,12 +39,6 @@ const showUpdateDialog = (url: string, updateLabel: string, updateType: string):
     });
 };
 
-/**
- * Opens a dialog showing that there are no updates available for @arg PronounDB.
- * @param name: The name of the plugin, in this case its @arg PronounDB.
- * @param { version, hash }: This is an array of both the latest version and latest build hash, which are displayed in the @arg Dialog.
- * @returns {void}
- */
 const noUpdates = (name: string, [version, hash]: string[]): void => {
     console.log(`[${name}] Plugin is on the latest update, which is version ${version} and build ${hash}`);
     Dialog.show({
@@ -70,12 +48,6 @@ const noUpdates = (name: string, [version, hash]: string[]): void => {
     });
 };
 
-/**
- * Opens a dialog showing that there is a failure to check for updates.
- * @param name: The name of the plugin, in this case its @arg PronounDB.
- * @param { version, hash }: This is an array of both the latest version and latest build hash, which are displayed in the @arg Dialog.
- * @returns {void}
- */
 const failureUpdate = (name: string, [version, hash]: string[]): void => {
     console.log(`[${name}] Plugin failed to update to the latest version and build, remaining at ${version} and ${hash}`);
     Dialog.show({
@@ -85,13 +57,6 @@ const failureUpdate = (name: string, [version, hash]: string[]): void => {
     });
 };
 
-/**
- * Install a plugin and open a new @arg Dialog asking to @arg reload Enmity.
- * @param {string} url: The URL of the plugin to install.
- * @param {string} type: The @arg version or @arg build which it has just updated to, provided when the function is called dynamically.
- * @param {updateType} updateType: The type of update which is being installed, options are @arg version and @arg build updates.
- * @returns {void}
- */
 async function installPlugin(url: string, type: string, updateType: string): Promise<void> {
     await tryCallback(async function() {
         /**

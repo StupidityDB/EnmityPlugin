@@ -23,7 +23,6 @@ const shadow = (opacity: number = 0.10): DefaultObject => ({
  * @param {'clipboard | 'tooltip'} type: The type of toast to show.
  *
  * @uses @param {number} Icons.Clipboard
- * @uses @param {number} Icons.Settings.Initial
  * @returns {void}
  */
 const displayToast = (source: string, type: 'clipboard' | 'tooltip'): void => {

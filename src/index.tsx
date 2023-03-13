@@ -74,7 +74,7 @@ const ReviewDB: Plugin = {
             // @ts-ignore
             trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }}/>}
             // @ts-ignore
-            leading={<FormRow.Icon source={Icons.Settings.Self} />}
+            leading={<FormRow.Icon source={Icons.Self} />}
             onPress={() => showOAuth2Modal()}
           />
           <FormDivider />
