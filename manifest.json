@@ -1,7 +1,7 @@
 {
   "name": "ReviewDB",
   "version": "1.9.0",
-  "build": "patch-1.4.5",
+  "build": "patch-1.4.6",
   "description": "Review other users. These reviews are visible to anyone with this type of plugin on any platform.",
   "authors": [
     {
@@ -17,7 +17,7 @@
   ],
   "color": "#ff0069",
   "links": {
-    "source": "https://raw.githubusercontent.com/spinfal/enmity-plugins/master/dist/ReviewDB.js",
+    "source": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/master/dist/ReviewDB.js",
     "api": "https://manti.vendicated.dev"
   }
 }
