@@ -47,7 +47,7 @@ export default ({ manifest }: SettingsProps) => {
           label="Check for Updates"
           subLabel={`Check for any plugin updates for ${manifest['name']}.`}
           /* @ts-ignore */
-          leading={<FormRow.Icon style={styles.icon} source={Icons.Copy} />}
+          leading={<FormRow.Icon source={Icons.Copy} />}
           trailing={FormRow.Arrow}
           onPress={() => {
             Updater.checkForUpdates()
@@ -59,7 +59,7 @@ export default ({ manifest }: SettingsProps) => {
           label="Source"
           subLabel={`View ${manifest['name']} source code`}
           /* @ts-ignore */
-          leading={<FormRow.Icon style={styles.icon} source={Icons.Open} />}
+          leading={<FormRow.Icon source={Icons.Open} />}
           trailing={FormRow.Arrow}
           onPress={() => Router.openURL(manifest.links.source)}
         />
