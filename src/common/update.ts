@@ -5,7 +5,7 @@ import tryCallback from './try_callback';
 
 async function checkForUpdates(): Promise<void> {
     await tryCallback(async function () {
-        const url = `${links.source}?${Math.floor(Math.random() * 1001)}.js`;
+        const url = `${links.dist}?${Math.floor(Math.random() * 1001)}.js`;
 
         const res: Response = await fetch(url);
         const content: string = await res.text();

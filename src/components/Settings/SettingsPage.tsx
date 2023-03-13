@@ -66,9 +66,7 @@ export default ({ manifest, children }: SettingsProps) => {
           /* @ts-ignore */
           leading={<FormRow.Icon style={styles.icon} source={Icons.Open} />}
           trailing={FormRow.Arrow}
-          onPress={() => {
-            Router.openURL(`https://github.com/spinfal/enmity-plugins/tree/master/${manifest['name']}`)
-          }}
+          onPress={() => Router.openURL(manifest.links.source)}
         />
       </View>
     </SectionWrapper>
