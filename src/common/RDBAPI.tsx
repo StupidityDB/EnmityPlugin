@@ -2,10 +2,10 @@ import { get, set } from 'enmity/api/settings';
 import { getByName } from 'enmity/metro';
 import { Dialog, Navigation, Toasts } from 'enmity/metro/common';
 import React from 'react';
-import { Icons } from '../../common/components/_pluginSettings/utils';
+import { Icons } from '.';
 import manifest from "../../manifest.json";
-import Page from './Page';
-import { ReviewContentProps } from './types';
+import Page from '../components/Page';
+import { ReviewContentProps } from '../components/types';
 
 const getRdbToken = () => get(manifest.name, "rdbToken", "");
 const OAuth2AuthorizeModal = getByName("OAuth2AuthorizeModal");

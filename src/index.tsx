@@ -5,11 +5,11 @@ import { getByProps } from "enmity/metro";
 import { React, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
-import SettingsPage from "../common/components/_pluginSettings/settingsPage";
-import { Icons } from "../common/components/_pluginSettings/utils";
+import SettingsPage from "./components/SettingsPage";
+import { Icons } from "./common";
 import manifest from "../manifest.json";
-import Reviews from "./utils/Reviews";
-import { showOAuth2Modal } from './utils/RDBAPI';
+import Reviews from "./components/Reviews";
+import { showOAuth2Modal } from './common/RDBAPI';
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -59,7 +59,7 @@ const ReviewDB: Plugin = {
     Patcher.unpatchAll();
   },
   getSettingsPanel({ settings }): any {
-    return <SettingsPage manifest={manifest} settings={settings} hasToasts={false} commands={null}>
+    return <SettingsPage manifest={manifest} settings={settings}>
       {/* @ts-ignore */}
       <FormSection title="Plugin Settings">
         <FormRow

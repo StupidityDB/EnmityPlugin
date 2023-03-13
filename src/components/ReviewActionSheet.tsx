@@ -2,9 +2,9 @@
 import { View } from 'enmity/components';
 import { getByProps, getModule } from "enmity/metro";
 import { React, Toasts } from "enmity/metro/common";
-import { Icons } from "../../common/components/_pluginSettings/utils";
+import { Icons } from "../common";
 import Button from "./Button";
-import { canDeleteReview, deleteReview, reportReview } from './RDBAPI';
+import { canDeleteReview, deleteReview, reportReview } from '../common/RDBAPI';
 import Review from './Review';
 import { ReviewContentProps } from './types';
 import { API_URL } from "../../manifest.json"

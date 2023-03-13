@@ -2,17 +2,15 @@
 import { SettingsStore } from 'enmity/api/settings';
 import { FormDivider, FormRow, FormSection, FormSwitch, ScrollView } from 'enmity/components';
 import { bulk, filters } from 'enmity/metro';
-import { Constants, Navigation, React, Storage, StyleSheet, Toasts } from 'enmity/metro/common';
-import Credits from './credits';
-import { check_for_updates, clipboard_toast, debug_info, Icons } from './utils';
+import { Constants, React, Storage, StyleSheet, Toasts } from 'enmity/metro/common';
+import Credits from '../common/credits';
+import { check_for_updates, clipboard_toast, debug_info, Icons } from '../common';
 
 // main settingsStore and manifest interface
 interface SettingsProps {
   settings: SettingsStore;
   manifest: object;
-  hasToasts: boolean;
   children?: any;
-  commands: any;
 }
 
 // main declaration of modules being altered by the plugin
@@ -41,48 +39,17 @@ const styles = StyleSheet.createThemedStyleSheet({
   }
 }); // main stylesheet
 
-export default ({ manifest, settings, hasToasts, children, commands }: SettingsProps) => {
+export default ({ manifest, children }: SettingsProps) => {
   return <ScrollView>
     <Credits manifest={manifest} /* main credits gui, created from scratch exclusively for dislate */ />
     {children}
-    {commands && <FormSection title="Plugin Commands">
-      {commands.map((command: any) => <FormRow
-        label={`/${command['name']}`}
-        subLabel={command['description']}
-        leading={<FormRow.Icon style={styles.icon} source={Icons.Settings.Commands} />}
-        trailing={FormRow.Arrow}
-        onPress={function () {
-          Clipboard.setString(`/${command['name']}`); // copy the command to clipboard`
-          clipboard_toast(`the command ${command['name']}`);
-        }}
-      />)}
-    </FormSection>}
+    {/* @ts-ignore */}
     <FormSection title="Utility">
-      {hasToasts && <>
-        <FormRow
-          label='Initialization Toasts'
-          leading={<FormRow.Icon style={styles.icon} source={Icons.Settings.Toasts.Context} />}
-          subLabel={`If available, show toasts when ${manifest['name']} is starting`}
-          trailing={
-            <FormSwitch
-              value={settings.getBoolean(`${manifest['name']}-toastEnable`, false)} // main toast function function
-              onValueChange={() => {
-                settings.toggle(`${manifest['name']}-toastEnable`, false)
-                Toasts.open({
-                  content: `Successfully ${settings.getBoolean(`${manifest['name']}-toastEnable`, false) ? 'enabled' : 'disabled'} initialization toasts.`,
-                  source: Icons.Success
-                }); // overwrites it with the opposite
-              }
-              }
-            />
-          }
-        />
-        <FormDivider />
-      </>}
-
       <FormRow
+        /* @ts-ignore */
         label='Copy Debug Info'
         subLabel={`Copy useful debug information of ${manifest['name']} to clipboard.`}
+        /* @ts-ignore */
         leading={<FormRow.Icon style={styles.icon} source={Icons.Settings.Debug} />}
         trailing={FormRow.Arrow}
         onPress={async function () {
@@ -92,8 +59,10 @@ export default ({ manifest, settings, hasToasts, children, commands }: SettingsP
       />
       <FormDivider />
       <FormRow
+        /* @ts-ignore */
         label='Clear Device List Cache'
         subLabel={`Remove the fetched device list storage. This will not clear Discord's or your iDevice's cache.`}
+        /* @ts-ignore */
         leading={<FormRow.Icon style={styles.icon} source={Icons.Delete} />}
         trailing={FormRow.Arrow}
         onPress={async function () {
@@ -105,10 +74,13 @@ export default ({ manifest, settings, hasToasts, children, commands }: SettingsP
         }}
       />
     </FormSection>
+    {/* @ts-ignore */}
     <FormSection title="Source">
       <FormRow
+        /* @ts-ignore */
         label="Check for Updates"
         subLabel={`Check for any plugin updates for ${manifest['name']}.`}
+        /* @ts-ignore */
         leading={<FormRow.Icon style={styles.icon} source={Icons.Copy} />}
         trailing={FormRow.Arrow}
         onPress={() => {
@@ -117,8 +89,10 @@ export default ({ manifest, settings, hasToasts, children, commands }: SettingsP
       />
       <FormDivider />
       <FormRow
+        /* @ts-ignore */
         label="Source"
         subLabel={`View ${manifest['name']} source code`}
+        /* @ts-ignore */
         leading={<FormRow.Icon style={styles.icon} source={Icons.Open} />}
         trailing={FormRow.Arrow}
         onPress={() => {
@@ -126,6 +100,7 @@ export default ({ manifest, settings, hasToasts, children, commands }: SettingsP
         }}
       />
     </FormSection>
+    {/* @ts-ignore */}
     <FormRow style={styles.bottom_padding} label={
       `Plugin Version: ${manifest['version']}
 Plugin Build: ${(manifest['build']).split('-').pop()}`

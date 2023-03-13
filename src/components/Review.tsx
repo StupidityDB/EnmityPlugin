@@ -4,7 +4,7 @@ import { Profiles, React, Users } from 'enmity/metro/common';
 import styles from "./StyleSheet";
 import { ReviewContentProps } from "./types";
 import { Toasts } from 'enmity/metro/common';
-import { Icons } from '../../common/components/_pluginSettings/utils/icons';
+import { Icons } from '../common';
 
 const [
   { ProfileGradientCard }, // used to render a card with the external colors being the user's profile theme. requires padding tobe set as a result.
