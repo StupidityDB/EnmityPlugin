@@ -42,7 +42,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
   ? Navigation.push(Page, {
     component: () => <OAuth2AuthorizeModal 
       clientId="915703782174752809"
-      redirectUri={manifest.API_URL + "/URauth"}
+      redirectUri={manifest.links.api + "/URauth"}
       scopes={["identify"]}
       responseType={"code"}
       permissions={0n}
@@ -78,7 +78,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
 
 export async function getReviews(userID: string) {
   try {
-    const res = await fetch(`${manifest.API_URL}/getUserReviews?snowflakeFormat=string&discordid=${userID}`);
+    const res = await fetch(`${manifest.links.api}/getUserReviews?snowflakeFormat=string&discordid=${userID}`);
     return await res.json();
   } catch (err) {
     Toasts.open({
@@ -92,7 +92,7 @@ export async function getReviews(userID: string) {
 export async function addReview(review: any) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.API_URL + "/addUserReview", {
+  const r = await fetch(manifest.links.api + "/addUserReview", {
     method: "POST",
     body: JSON.stringify(review),
     headers: {
@@ -110,7 +110,7 @@ export async function addReview(review: any) {
 export async function deleteReview(id: number) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.API_URL + "/deleteReview", {
+  const r = await fetch(manifest.links.api + "/deleteReview", {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export async function deleteReview(id: number) {
 export async function reportReview(id: number) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const res = await fetch(manifest.API_URL + "/reportReview", {
+  const res = await fetch(manifest.links.api + "/reportReview", {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",

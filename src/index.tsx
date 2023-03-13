@@ -34,7 +34,7 @@ const ReviewDB: Plugin = {
 
     ensureCurrentUserInitialized();
 
-    const admins = await fetch(manifest.API_URL + "/admins")
+    const admins = await fetch(manifest.links.api + "/admins")
       .then(res => res.json())
 
     /*

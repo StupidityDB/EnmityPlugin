@@ -1,4 +1,4 @@
-import { name, sourceUrl, version, build } from '../../manifest.json';
+import { name, links, version, build } from '../../manifest.json';
 import { Dialog } from 'enmity/metro/common';
 import { reload } from 'enmity/api/native';
 import tryCallback from './try_callback';
@@ -9,7 +9,7 @@ import tryCallback from './try_callback';
  */
 async function checkForUpdates(): Promise<void> {
     await tryCallback(async function () {
-        const url = `${sourceUrl}?${Math.floor(Math.random() * 1001)}.js`;
+        const url = `${links.source}?${Math.floor(Math.random() * 1001)}.js`;
 
         const res: Response = await fetch(url);
         const content: string = await res.text();
@@ -31,7 +31,7 @@ async function checkForUpdates(): Promise<void> {
         if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
         if (externalBuild && (externalBuild != build)) return showUpdateDialog(url, externalBuild.split("-")[1], "build");
         return noUpdates(name, [version, build]);
-    }, [sourceUrl, version, build], name, 'checking if latest version at', 'the async check for updates callback');
+    }, [links, version, build], name, 'checking if latest version at', 'the async check for updates callback');
 }
 
 /**

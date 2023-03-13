@@ -1,12 +1,11 @@
 {
-  "name": "plugins-enmity",
+  "name": "review-db",
   "description": "",
   "version": "1.0.0",
   "license": "GPL-3.0",
-  "author": "spinfal",
+  "author": "spinfal & rosie",
   "scripts": {
     "debug": "cd ../enmity-debug && node .",
-    "http": "python -m http.server",
     "build": "rollup -c --configPlugin esbuild"
   },
   "devDependencies": {

@@ -1,0 +1,63 @@
+Arguments: 
+  /Users/stefanstratila/.nvm/versions/node/v19.0.0/bin/node /Users/stefanstratila/.nvm/versions/node/v19.0.0/bin/yarn build
+
+PATH: 
+  /Users/stefanstratila/Desktop/Enmity_Projects/EnmityPlugin/node_modules/.bin:/Users/stefanstratila/.rvm/gems/ruby-3.1.0/bin:/Users/stefanstratila/.rvm/gems/ruby-3.1.0@global/bin:/Users/stefanstratila/.rvm/rubies/ruby-3.1.0/bin:/Users/stefanstratila/.nvm/versions/node/v19.0.0/bin:/Users/stefanstratila/.asdf/shims:/opt/homebrew/opt/asdf/libexec/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/stefanstratila/.rvm/gems/ruby-3.1.0/bin:/Users/stefanstratila/.rvm/gems/ruby-3.1.0@global/bin:/Users/stefanstratila/.rvm/rubies/ruby-3.1.0/bin:/Users/stefanstratila/.nvm/versions/node/v19.0.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Users/stefanstratila/.cargo/bin:/Users/stefanstratila/Library/Application Support/JetBrains/Toolbox/scripts:/Users/stefanstratila/.rvm/bin:/Users/stefanstratila/Library/Application Support/JetBrains/Toolbox/scripts:/Users/stefanstratila/.rvm/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  19.0.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/stefanstratila/Desktop/Enmity_Projects/EnmityPlugin/package.json: Expected double-quoted property name in JSON at position 185
+      at JSON.parse (<anonymous>)
+      at /Users/stefanstratila/.nvm/versions/node/v19.0.0/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/Users/stefanstratila/.nvm/versions/node/v19.0.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/stefanstratila/.nvm/versions/node/v19.0.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "review-db",
+    "description": "",
+    "version": "1.0.0",
+    "license": "GPL-3.0",
+    "author": "spinfal & rosie",
+    "scripts": {
+      "debug": "cd ../enmity-debug && node .",
+    },
+    "devDependencies": {
+      "@rollup/plugin-commonjs": "^21.0.1",
+      "@rollup/plugin-json": "^4.1.0",
+      "@rollup/plugin-node-resolve": "^13.1.1",
+      "@types/node": "^17.0.5",
+      "@types/react": "^18.0.28",
+      "@typescript-eslint/eslint-plugin": "^5.8.1",
+      "@typescript-eslint/parser": "^5.8.1",
+      "esbuild": "^0.14.9",
+      "eslint": "^8.5.0",
+      "react": "^18.2.0",
+      "rollup": "^2.62.0",
+      "rollup-plugin-esbuild": "^4.8.2"
+    },
+    "optionalDependencies": {
+      "esbuild-darwin-64": "^0.14.21",
+      "esbuild-darwin-arm64": "^0.14.21",
+      "esbuild-linux-64": "^0.14.21",
+      "esbuild-windows-64": "^0.14.21"
+    },
+    "dependencies": {
+      "enmity": "*"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
