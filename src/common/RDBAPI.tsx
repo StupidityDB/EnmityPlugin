@@ -1,7 +1,6 @@
 import { get, set } from 'enmity/api/settings';
 import { getByName } from 'enmity/metro';
-import { Dialog, Navigation, Toasts } from 'enmity/metro/common';
-import React from 'react';
+import { Dialog, Navigation, Toasts, React } from 'enmity/metro/common';
 import { Icons } from './'
 import manifest from "../../manifest.json";
 import Page from '../components/Dependent/Page';

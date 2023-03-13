@@ -1,6 +1,5 @@
 import { View, Text } from "enmity/components"
 import { Constants, React, StyleSheet } from "enmity/metro/common"
-import { ReactElement } from "react";
 
 const styles = StyleSheet.createThemedStyleSheet({
     text: {
@@ -16,7 +15,7 @@ const styles = StyleSheet.createThemedStyleSheet({
 
 interface SectionWrapperProps {
     label: string, 
-    children?: Partial<ReactElement>, 
+    children?: any, 
     style?: { [key: string]: any }
 }
 
