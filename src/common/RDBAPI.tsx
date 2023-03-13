@@ -4,7 +4,7 @@ import { Dialog, Navigation, Toasts, React } from 'enmity/metro/common';
 import { Icons } from './'
 import manifest from "../../manifest.json";
 import Page from '../components/Dependent/Page';
-import { ReviewContentProps } from './types';
+import { Review, Endpoint } from './types';
 
 const getRdbToken = () => get(manifest.name, "rdbToken", "");
 const OAuth2AuthorizeModal = getByName("OAuth2AuthorizeModal");
@@ -53,15 +53,15 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
           authURL.searchParams.append("clientMod", "enmity");
 
           const res = await fetch(authURL, { headers: { accept: "application/json" } });
-          const { token, success } = await res.json();
+          const { token, success, message }: Endpoint = await res.json();
 
           if (success) {
             // success! we can set the token
-            set(manifest.name, "rdbToken", token)
-          } else {
-            // failure :c
-            throw new Error(`Status returned by backend was not OK: ${status}`);
-          }
+            set(manifest.name, "rdbToken", token as string)
+          } 
+
+          // failure :c
+          throw new Error(`Status returned by backend was not OK: ${message}`);
         } catch(e) {
           Navigation.pop();
           console.error(`[${manifest.name}] Error when authorizing account: ${e}`)
@@ -72,7 +72,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
   }) 
   : Toasts.open({
     content: "You already have a token set!",
-    source: Icons.Initial
+    source: Icons.Self
   })
 
 export async function getReviews(userID: string) {
@@ -81,13 +81,13 @@ export async function getReviews(userID: string) {
       method: "GET",
     });
 
-    const { reviews, success, message } = await (res.json())
+    const { reviews, success, message }: Endpoint = await res.json();
 
     if (success) {
-      return reviews
+      return reviews;
     }
     
-    throw new Error("Error when getting reviews: " + message)
+    throw new Error("Error when getting reviews: " + message);
   } catch (err) {
     Toasts.open({
       content: "Error while fetching reviews. Check logs for more info.",
@@ -108,7 +108,7 @@ export async function addReview(review: any) {
     }
   });
 
-  const { message } = await r.json();
+  const { message }: Endpoint = await r.json();
 
   message && Toasts.open({
     content: message + "!",
@@ -133,7 +133,7 @@ export async function deleteReview(id: number) {
     })
   });
 
-  const { message } = await r.json();
+  const { message }: Endpoint = await r.json();
 
   Toasts.open({
     content: (message ?? "Response is empty") + "!",
@@ -156,7 +156,7 @@ export async function reportReview(id: number) {
     })
   });
 
-  const { message } = await res.json()
+  const { message }: Endpoint = await res.json();
 
   Toasts.open({
     content: (message ?? "Response is empty") + "!",
@@ -175,7 +175,7 @@ export async function reportReview(id: number) {
 // }
 
 export const canDeleteReview = (
-  review: ReviewContentProps, 
+  review: Review, 
   currentUserID: string, 
   admins: string[]
-) => admins.includes(currentUserID) ?? review["senderdiscordid"] == currentUserID
+) => admins.includes(currentUserID) ?? review["sender"]["discordID"] == currentUserID;

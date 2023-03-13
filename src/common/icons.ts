@@ -9,7 +9,6 @@ export default {
   Copy: getIDByName('toast_copy_link'),
   Open: getIDByName('ic_leave_stage'),
   Clipboard: getIDByName('pending-alert'),
-  Initial: getIDByName('coffee'),
   Shield: getIDByName("ic_person_shield"),
   Self: getIDByName('friends_toast_icon')
 };

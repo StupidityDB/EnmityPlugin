@@ -10,7 +10,7 @@ import { addReview, getReviews } from '../../common/RDBAPI';
 import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 import styles from "../../common/StyleSheet";
-import { ReviewContentProps } from '../../common/types';
+import { Review as ReviewType } from '../../common/types';
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 
@@ -21,14 +21,14 @@ interface ReviewsSectionProps {
 }
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
-  const [reviews, setReviews] = React.useState<Array<ReviewContentProps>>();
+  const [reviews, setReviews] = React.useState<Array<ReviewType>>();
 
   // this will update whenever this component is rerendered (as its not state or in a useEffect), aka when the reviews are set. therefore, this *should* display the correct info.
-  const existingReview = reviews?.find((review: object) => review["senderdiscordid"] === currentUserID);
+  const existingReview = reviews?.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID);
 
   React.useEffect(() => {
-    getReviews(userID).then(state => {
-      setReviews(state)
+    getReviews(userID).then((reviews: ReviewType[] | undefined) => {
+      reviews && setReviews(reviews)
     });
   }, [])
 
@@ -41,14 +41,14 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     <View style={styles.reviewWindow}>
       <View style={styles.container}>
         {reviews && reviews.length > 0
-        ? reviews.map((item: ReviewContentProps) => <Review
-            item={item}
-            onSubmit={() => renderActionSheet(ReviewActionSheet, {
-                onConfirm: () => LazyActionSheet?.hideActionSheet(), 
-                item, currentUserID, admins
-              })
-            }
-          />)
+          ? reviews.map((review: ReviewType) => <Review
+              review={review}
+              onSubmit={() => renderActionSheet(ReviewActionSheet, {
+                  onConfirm: () => LazyActionSheet?.hideActionSheet(), 
+                  review, currentUserID, admins
+                })
+              }
+            />)
           : <Text style={[
             styles.text,
             styles.safeText,

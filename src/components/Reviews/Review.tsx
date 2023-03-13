@@ -2,7 +2,7 @@ import { Image, Text, TouchableOpacity, View, FormRow } from "enmity/components"
 import { bulk, filters } from "enmity/metro";
 import { Profiles, React, Users } from 'enmity/metro/common';
 import styles from "../../common/StyleSheet";
-import { ReviewContentProps } from "../../common/types";
+import { Review } from "../../common/types";
 import { Toasts } from 'enmity/metro/common';
 import { Icons } from '../../common';
 
@@ -15,15 +15,15 @@ const [
 );
 
 interface ReviewProps {
-  item: ReviewContentProps;
+  review: Review;
   onSubmit: Function;
 }
 
-export default ({ item, onSubmit }: ReviewProps) => {
+export default ({ review, onSubmit }: ReviewProps) => {
   const [formattedTime, setFormattedTime] = React.useState<string>();
 
   React.useEffect(() => {
-    Boolean(item["timestamp"]) && setFormattedTime(new Date(item["timestamp"] * 1000)
+    Boolean(review["timestamp"]) && setFormattedTime(new Date(review["timestamp"] * 1000)
         .toLocaleString(undefined, { 
             hour: 'numeric', 
             minute: 'numeric', 
@@ -31,7 +31,7 @@ export default ({ item, onSubmit }: ReviewProps) => {
             month: 'numeric', 
             year: 'numeric' })
         .split(",")
-        .map(item => item.replace(/ /g, ""))
+        .map(component => component.replace(/ /g, ""))
         .reverse()
         .join(" "))
   })
@@ -43,25 +43,25 @@ export default ({ item, onSubmit }: ReviewProps) => {
       <View style={{ padding: 8 }}>
         <TouchableOpacity
           onPress={() => {
-            Users.getUser(item["senderdiscordid"])
-              ? Profiles.showUserProfile({ userId: item["senderdiscordid"] })
-              : ProfileFetcher.getUser(item["senderdiscordid"]).then(() => Profiles.showUserProfile({ userId: item["senderdiscordid"] }))
+            Users.getUser(review["sender"]["discordID"])
+              ? Profiles.showUserProfile({ userId: review["sender"]["discordID"] })
+              : ProfileFetcher.getUser(review["sender"]["discordID"]).then(() => Profiles.showUserProfile({ userId: review["sender"]["discordID"] }))
           }}
           style={styles.avatarContainer}
         >
-          {Boolean(item["profile_photo"]) && <Image
+          {Boolean(review["sender"]["profilePhoto"]) && <Image
             loading="lazy"
             style={styles.avatarAuthor}
             source={{
-              uri: (item["profile_photo"] as string)?.replace("?size=128", "?size=48"),
+              uri: (review["sender"]["profilePhoto"] as string)?.replace("?size=128", "?size=48"),
             }}
           />}
-          {Boolean(item["username"]) && <View style={{ marginLeft: 6 }}>
+          {Boolean(review["sender"]["username"]) && <View style={{ marginLeft: 6 }}>
             <Text style={[styles.mainText, styles.authorName]}>
-              {item["username"]}
+              {review["sender"]["username"]}
             </Text>
           </View>}
-          {item["isSystemMessage"] && <TouchableOpacity
+          {review["type"] === 3 && <TouchableOpacity
             style={styles.systemContainer}
             onPress={() => Toasts.open({
               source: Icons.Shield,
@@ -82,22 +82,22 @@ export default ({ item, onSubmit }: ReviewProps) => {
               SYSTEM
             </Text> 
           </TouchableOpacity>}
-          {Boolean(item["badges"].length > 0) && item["badges"].map(badge => <TouchableOpacity
+          {Boolean(review["sender"]["badges"]?.length > 0) && review["sender"]["badges"].map(badge => <TouchableOpacity
             onPress={() => Toasts.open({
               source: {
-                uri: badge["badge_icon"]
+                uri: badge["icon"]
               },
-              content: badge["badge_name"]
+              content: badge["name"]
           })}>
             <Image
               loading="lazy"
               style={styles.rdbBadge}
               source={{
-                uri: badge["badge_icon"],
+                uri: badge["icon"],
               }}
             />
           </TouchableOpacity>)}
-          {Boolean(item["timestamp"]) && <Text style={{ 
+          {Boolean(review["timestamp"]) && <Text style={{ 
               ...styles.mainText, 
               ...styles.timestamp
           }}>
@@ -105,7 +105,7 @@ export default ({ item, onSubmit }: ReviewProps) => {
           </Text>}
         </TouchableOpacity>
         <Text style={styles.messageContent}>
-          {item["comment"] ?? "Invalid message content."}
+          {review["comment"] ?? "Invalid message content."}
         </Text>
       </View>
     </TouchableOpacity>

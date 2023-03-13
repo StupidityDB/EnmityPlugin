@@ -20,7 +20,7 @@ async function checkForUpdates(): Promise<void> {
         const externalHash = potentialExternalHash && potentialExternalHash[1]
 
         if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
-        if (externalHash && (externalHash != build)) return showUpdateDialog(url, externalHash.split("-")[1], 'build');
+        if (externalHash && (externalHash != build)) return showUpdateDialog(url, externalHash, 'build');
         return noUpdates(name, [version, build]);
     }, [links, version, build], name, 'checking if latest version at', 'the async check for updates callback');
 }

@@ -28,7 +28,7 @@ const shadow = (opacity: number = 0.10): DefaultObject => ({
 const displayToast = (source: string, type: 'clipboard' | 'tooltip'): void => {
     Toasts.open({ 
         content: type=='clipboard' ? `Copied ${source} to clipboard.` : source, 
-        source: type=='clipboard' ? Icons.Clipboard : Icons.Initial 
+        source: type=='clipboard' ? Icons.Clipboard : Icons.Self 
     });
 };
 

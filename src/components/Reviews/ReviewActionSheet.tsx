@@ -6,7 +6,7 @@ import { Icons } from "../../common";
 import Button from "../Dependent/Button";
 import { canDeleteReview, deleteReview, reportReview } from '../../common/RDBAPI';
 import Review from './Review';
-import { ReviewContentProps } from '../../common/types';
+import { Review as ReviewType } from '../../common/types';
 
 const ActionSheet = (getModule(x => x.default?.render?.name == "ActionSheet") ?? { default: { render: false } }).default.render;
 const BottomSheetScrollView = getByProps("BottomSheetScrollView").BottomSheetScrollView;
@@ -21,12 +21,12 @@ export function renderActionSheet(component: any, props: { [key: string]: any })
 
 interface ReviewActionSheetProps {
   onConfirm: Function;
-  item: ReviewContentProps;
+  review: ReviewType;
   currentUserID: string;
   admins: string[]
 }
 
-export default function ReviewActionSheet({ onConfirm, item, currentUserID, admins }: ReviewActionSheetProps) {
+export default function ReviewActionSheet({ onConfirm, review, currentUserID, admins }: ReviewActionSheetProps) {
   // it is not scrollable, meaning the height is not predefined, and takes up however much is required to render the content, up to half of the screen.
   return <ActionSheet>
     <BottomSheetScrollView contentContainerStyle={{ marginBottom: 10 }}>
@@ -40,44 +40,44 @@ export default function ReviewActionSheet({ onConfirm, item, currentUserID, admi
         justifyContent: 'center',
       }}>
         <Review
-          item={item}
+          review={review}
           onSubmit={() => {}}
         />
 
-        {Boolean(item["comment"]) && <Button
+        {Boolean(review["comment"]) && <Button
           text="Copy Text"
           image="ic_message_copy"
           onPress={() => {
-            Clipboard.setString(item["comment"])
+            Clipboard.setString(review["comment"])
             Toasts.open({ content: "Copied to clipboard!", source: Icons.Success })
             onConfirm()
           }}
         />}
-        {Boolean(item["id"]) && <Button
+        {Boolean(review["id"]) && <Button
           text="Copy ID"
           image="ic_copy_id"
           onPress={() => {
-            Clipboard.setString((item["id"] as number).toString())
+            Clipboard.setString((review["id"])?.toString())
             Toasts.open({ content: "Copied to clipboard!", source: Icons.Success })
             onConfirm()
           }}
         />}
-        {canDeleteReview(item, currentUserID, admins) && <Button
+        {canDeleteReview(review, currentUserID, admins) && <Button
           text="Delete Review"
           image="ic_message_delete"
           dangerous
           onPress={() => {
-            deleteReview(item["id"] as number).then(() => {
+            deleteReview(review["id"]).then(() => {
               onConfirm()
             })
           }}
         />}
-        {Boolean(item["id"]) && <Button
+        {Boolean(review["id"]) && <Button
           text="Report Review"
           image="ic_warning_24px"
           dangerous
           onPress={() => {
-            reportReview(item["id"] as number).then(() => {
+            reportReview(review["id"]).then(() => {
               onConfirm()
             })
           }}
