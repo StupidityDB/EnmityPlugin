@@ -36,7 +36,6 @@ export default ({ item, onSubmit }: ReviewProps) => {
         .join(" "))
   })
 
-
   // This was a lot easier than i thought, it automatically uses the correct profile theme colors when rendered.
   // if the user has no profile theme colors or this is not rendered inside of a profile, then the fallback color will be used.
   return <ProfileGradientCard style={styles.reviewContainer} fallbackBackground={styles.fallback.color}>
