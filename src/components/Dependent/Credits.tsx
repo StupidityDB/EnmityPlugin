@@ -87,7 +87,7 @@ export default ({ manifest }: Props) => {
     };
 
     // opens the repo of the plugin externally
-    const onPress = () => { Router.openURL("https://spin.rip/") };
+    const onPress = () => { Router.openURL(manifest.links.source) };
     const animatedScaleStyle = { transform: [{ scale: animatedButtonScale }] } // main actual styling for the scale
 
     return <View style={styles.container}>
@@ -108,9 +108,9 @@ export default ({ manifest }: Props) => {
             </Animated.View>
         </TouchableOpacity>
         <View style={styles.textContainer /* text only container */}>
-            <TouchableOpacity onPress={() => { Router.openURL(manifest['sourceUrl']) }}>
+            <TouchableOpacity onPress={onPress}>
                 <Text style={[styles.mainText, styles.header]} /* main title text, in this case its "Dislate" */>
-                    {manifest['name']} {/* the plugin name in manifest.json */}
+                    {manifest.name} {/* the plugin name in manifest.json */}
                 </Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row' } /* makes the elements render inline */}>
@@ -134,7 +134,7 @@ export default ({ manifest }: Props) => {
                 <TouchableOpacity
                     style={{ flexDirection: 'row' } /* display text inline */}
                     onPress={() => {
-                        Clipboard.setString(`**${manifest['name']}** v${manifest['version']}`);
+                        Clipboard.setString(`**${manifest.name}** v${manifest.version}`);
                         Miscellaneous.displayToast('plugin name and version', "clipboard");
                     }} // copy the debug info from utility function to clipboard
                 >
@@ -146,7 +146,7 @@ export default ({ manifest }: Props) => {
                             paddingLeft: 4,
                             fontFamily: Constants.Fonts.DISPLAY_BOLD
                         }]} >
-                        {manifest['version']} {/* the version in manifest.json */}
+                        {manifest.version} {/* the version in manifest.json */}
                     </Text>
                 </TouchableOpacity>
             </View>
