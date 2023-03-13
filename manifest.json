@@ -1,8 +1,7 @@
 {
    "name": "ReviewDB",
    "version": "1.9.1",
-   "build": "patch-1.4.8",
-   "hash": "9db12f07",
+   "hash": "9129bd29",
    "description": "Review other users. These reviews are visible to anyone with this type of plugin on any platform.",
    "authors": [
       {
