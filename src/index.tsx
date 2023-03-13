@@ -1,17 +1,12 @@
 import { get, set } from "enmity/api/settings";
-import { FormDivider, FormInput, FormRow, View } from "enmity/components";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByProps } from "enmity/metro";
-import { Native, React, Users } from "enmity/metro/common";
+import { React, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
-import SettingsPage from "./components/Settings/SettingsPage";
-import { Icons } from "./common";
 import manifest from "../manifest.json";
 import Reviews from "./components/Reviews/Reviews";
-import { showOAuth2Modal } from './common/RDBAPI';
-import styles from "./common/StyleSheet";
-import SectionWrapper from "./components/Wrappers/SectionWrapper";
+import Settings from "./components/Settings/Settings";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -61,34 +56,7 @@ const ReviewDB: Plugin = {
     Patcher.unpatchAll();
   },
   getSettingsPanel({ settings }): any {
-    const { Version } = Native.InfoDictionaryManager;
-    const optionalMargin = parseInt(Version?.split(".")[0]) > 163 ? 15 : 0;
-
-    return <SettingsPage manifest={manifest} settings={settings}>
-      <SectionWrapper label="Authentication">
-        <View style={styles.formrowContainer}>
-          <FormRow
-            // @ts-ignore
-            label="Authenticate with ReviewDB"
-            subLabel="Open a modal to authenticate your account with the ReviewDB API."
-            // @ts-ignore
-            trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }}/>}
-            // @ts-ignore
-            leading={<FormRow.Icon source={Icons.Self} />}
-            onPress={() => showOAuth2Modal()}
-          />
-          <FormDivider />
-          <FormInput
-            placeholder="Your token goes here"
-            value={get(manifest.name, "rdbToken", "")}
-            onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value) 
-              ? set(manifest.name, "rdbToken", value.trim()) 
-              : set(manifest.name, "rdbToken", ""))}
-            title="ReviewDB Authentication Token"
-          />
-        </View>
-      </SectionWrapper>
-    </SettingsPage>
+    return <Settings manifest={manifest} settings={settings} />
   },
 };
 

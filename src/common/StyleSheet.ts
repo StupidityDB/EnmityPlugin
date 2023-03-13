@@ -98,6 +98,24 @@ const styles = StyleSheet.createThemedStyleSheet({
     paddingVertical: 2,
     paddingRight: 4
   },
+  subheaderText: {
+    color: Constants.ThemeColorMap.HEADER_SECONDARY,
+    textAlign: 'center',
+    margin: 10,
+    marginBottom: 50,
+    letterSpacing: 0.25,
+    fontFamily: Constants.Fonts.PRIMARY_BOLD,
+    fontSize: 14
+  },
+  sectionWrapperText: {
+    color: Constants.ThemeColorMap.HEADER_SECONDARY,
+    paddingLeft: "5.5%",
+    paddingRight: 10,
+    marginBottom: 10,
+    letterSpacing: 0.25,
+    fontFamily: Constants.Fonts.PRIMARY_BOLD,
+    fontSize: 12
+  },
   
   // styles for more obscure texts
   timestamp: {
@@ -149,7 +167,8 @@ const styles = StyleSheet.createThemedStyleSheet({
   icon: {
     width: 16,
     height: 16,
-    marginRight: 4
+    marginRight: 4,
+    color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
   },
   systemIcon: {
     width: 12,

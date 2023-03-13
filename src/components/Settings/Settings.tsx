@@ -1,44 +1,47 @@
 // main imports of elements and dependencies
-import { FormDivider, FormRow, ScrollView, View, Text } from 'enmity/components';
+import { FormDivider, FormRow, ScrollView, View, Text, FormInput } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
-import { Constants, React, StyleSheet } from 'enmity/metro/common';
+import { Native, React } from 'enmity/metro/common';
 import Credits from '../Dependent/Credits';
 import { Updater, Icons } from '../../common';
 import SectionWrapper from '../Wrappers/SectionWrapper';
-import stylesheetStyles from '../../common/StyleSheet';
+import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../common/types';
+import { showOAuth2Modal } from '../../common/RDBAPI';
+import { get, set } from 'enmity/api/settings';
 
 const Router = getByProps("openURL", "transitionToGuild");
+const { Version } = Native.InfoDictionaryManager;
+const optionalMargin = parseInt(Version?.split(".")[0]) > 163 ? 15 : 0;
 
-// icon and styles
-const styles = StyleSheet.createThemedStyleSheet({
-  icon: {
-    color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
-  },
-  item: {
-    color: Constants.ThemeColorMap.TEXT_MUTED
-  },
-  text_container: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  subheaderText: {
-    color: Constants.ThemeColorMap.HEADER_SECONDARY,
-    textAlign: 'center',
-    margin: 10,
-    marginBottom: 50,
-    letterSpacing: 0.25,
-    fontFamily: Constants.Fonts.PRIMARY_BOLD,
-    fontSize: 14
- },
-}); // main stylesheet
-
-export default ({ manifest, children }: SettingsProps) => {
+export default ({ manifest }: SettingsProps) => {
   return <ScrollView>
     <Credits manifest={manifest} /* main credits gui, created from scratch exclusively for dislate */ />
-    {children}
+    <SectionWrapper label="Authentication">
+      <View style={styles.formrowContainer}>
+        <FormRow
+          // @ts-ignore
+          label="Authenticate with ReviewDB"
+          subLabel="Open a modal to authenticate your account with the ReviewDB API."
+          // @ts-ignore
+          trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }}/>}
+          // @ts-ignore
+          leading={<FormRow.Icon source={Icons.Self} />}
+          onPress={() => showOAuth2Modal()}
+        />
+        <FormDivider />
+        <FormInput
+          placeholder="Your token goes here"
+          value={get(manifest.name, "rdbToken", "")}
+          onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value) 
+            ? set(manifest.name, "rdbToken", value.trim()) 
+            : set(manifest.name, "rdbToken", ""))}
+          title="ReviewDB Authentication Token"
+        />
+      </View>
+    </SectionWrapper>
     <SectionWrapper label="Source">
-      <View style={stylesheetStyles.formrowContainer}>
+      <View style={styles.formrowContainer}>
         <FormRow
           /* @ts-ignore */
           label="Check for Updates"

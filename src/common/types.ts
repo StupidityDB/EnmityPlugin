@@ -68,7 +68,6 @@ export interface ReviewsSectionProps {
 export interface SettingsProps {
     settings: SettingsStore;
     manifest: typeof manifest;
-    children?: any;
 };
 
 export interface SectionWrapperProps {
