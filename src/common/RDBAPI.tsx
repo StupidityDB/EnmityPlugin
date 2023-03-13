@@ -41,7 +41,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
   ? Navigation.push(Page, {
     component: () => <OAuth2AuthorizeModal 
       clientId="915703782174752809"
-      redirectUri={manifest.links.api + "/URauth"}
+      redirectUri={manifest.links.api + "/api/reviewdb/auth"}
       scopes={["identify"]}
       responseType={"code"}
       permissions={0n}
@@ -53,9 +53,9 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
           authURL.searchParams.append("clientMod", "enmity");
 
           const res = await fetch(authURL, { headers: { accept: "application/json" } });
-          const { token, status } = await res.json();
+          const { token, success } = await res.json();
 
-          if (status === 0) {
+          if (success) {
             // success! we can set the token
             set(manifest.name, "rdbToken", token)
           } else {
@@ -77,8 +77,17 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
 
 export async function getReviews(userID: string) {
   try {
-    const res = await fetch(`${manifest.links.api}/getUserReviews?snowflakeFormat=string&discordid=${userID}`);
-    return await res.json();
+    const res = await fetch(`${manifest.links.api}/api/reviewdb?snowflakeFormat=string&discordid=${userID}`, {
+      method: "GET",
+    });
+
+    const { reviews, success, message } = await (res.json())
+
+    if (success) {
+      return reviews
+    }
+    
+    throw new Error("Error when getting reviews: " + message)
   } catch (err) {
     Toasts.open({
       content: "Error while fetching reviews. Check logs for more info.",
@@ -91,38 +100,43 @@ export async function getReviews(userID: string) {
 export async function addReview(review: any) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.links.api + "/addUserReview", {
-    method: "POST",
+  const r = await fetch(manifest.links.api + "/api/reviewdb", {
+    method: "PUT",
     body: JSON.stringify(review),
     headers: {
       "Content-Type": "application/json",
     }
   });
-  const res = await r.text();
-  res && Toasts.open({
-    content: res + "!",
+
+  const { message } = await r.json();
+
+  message && Toasts.open({
+    content: message + "!",
     source: Icons.Pencil,
   });
-  return console.log("[ReviewDB]", Response[res] ?? Response.error);
+
+  return console.log("[ReviewDB]", Response[message] ?? Response.error);
 }
 
 export async function deleteReview(id: number) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.links.api + "/deleteReview", {
-    method: "POST",
+  const r = await fetch(manifest.links.api + "/api/reviewdb", {
+    method: "DELETE",
     headers: new Headers({
       "Content-Type": "application/json",
       Accept: "application/json",
     }),
     body: JSON.stringify({
+      reviewid: id,
       token: getRdbToken(),
-      reviewid: id
     })
   });
-  const res = await r.json();
+
+  const { message } = await r.json();
+
   Toasts.open({
-    content: (res?.message || "Response is empty") + "!",
+    content: (message ?? "Response is empty") + "!",
     source: Icons.Success,
   });
 }
@@ -130,8 +144,8 @@ export async function deleteReview(id: number) {
 export async function reportReview(id: number) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const res = await fetch(manifest.links.api + "/reportReview", {
-    method: "POST",
+  const res = await fetch(manifest.links.api + "/api/reviewdb", {
+    method: "REPORT",
     headers: new Headers({
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -141,8 +155,11 @@ export async function reportReview(id: number) {
       token: getRdbToken()
     })
   });
+
+  const { message } = await res.json()
+
   Toasts.open({
-    content: (await res.text()) + "!",
+    content: (message ?? "Response is empty") + "!",
     source: Icons.Success,
   });
 }
