@@ -11,16 +11,16 @@ async function checkForUpdates(): Promise<void> {
         const content: string = await res.text();
 
         const potentialExternalVersion = content.match(/\d+\.\d+\.\d+/g)
-        const potentialExternalBuild = content.match(/patch-\d+\.\d+\.\d+/)
+        const potentialExternalHash = content.match(/hash:"(.*?)"/)
 
-        if (!potentialExternalVersion && !potentialExternalBuild)
+        if (!potentialExternalVersion && !potentialExternalHash)
             return failureUpdate(name, [version, build]);
 
         const externalVersion = potentialExternalVersion && potentialExternalVersion[0];
-        const externalBuild = potentialExternalBuild && potentialExternalBuild[0]
+        const externalHash = potentialExternalHash && potentialExternalHash[1]
 
         if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
-        if (externalBuild && (externalBuild != build)) return showUpdateDialog(url, externalBuild.split("-")[1], "build");
+        if (externalHash && (externalHash != build)) return showUpdateDialog(url, externalHash.split("-")[1], 'build');
         return noUpdates(name, [version, build]);
     }, [links, version, build], name, 'checking if latest version at', 'the async check for updates callback');
 }

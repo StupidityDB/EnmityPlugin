@@ -1,24 +1,25 @@
 {
-  "name": "ReviewDB",
-  "version": "1.9.0",
-  "build": "patch-1.4.7",
-  "description": "Review other users. These reviews are visible to anyone with this type of plugin on any platform.",
-  "authors": [
-    {
-      "name": "spin",
-      "id": "308440976723148800",
-      "profile": "https://spin.rip/"
-    },
-    {
-      "name": "Rosie<3",
-      "id": "581573474296791211",
-      "profile": "https://github.com/acquitelol"
-    }
-  ],
-  "color": "#ff0069",
-  "links": {
-    "source": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/",
-    "dist": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/master/dist/ReviewDB.js",
-    "api": "https://manti.vendicated.dev"
-  }
+   "name": "ReviewDB",
+   "version": "1.9.0",
+   "build": "patch-1.4.8",
+   "hash": "c99f3ae0",
+   "description": "Review other users. These reviews are visible to anyone with this type of plugin on any platform.",
+   "authors": [
+      {
+         "name": "spin",
+         "id": "308440976723148800",
+         "profile": "https://spin.rip/"
+      },
+      {
+         "name": "Rosie<3",
+         "id": "581573474296791211",
+         "profile": "https://github.com/acquitelol"
+      }
+   ],
+   "color": "#ff0069",
+   "links": {
+      "source": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/",
+      "dist": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/master/dist/ReviewDB.js",
+      "api": "https://manti.vendicated.dev"
+   }
 }

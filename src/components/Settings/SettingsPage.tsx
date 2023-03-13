@@ -71,7 +71,7 @@ export default ({ manifest, children }: SettingsProps) => {
       </View>
     </SectionWrapper>
     <Text style={styles.subheaderText}>
-      {`Version: (${manifest.version}) Build: (${manifest.build?.split("-")[1]})`}
+      {`Version: (${manifest.version}) Build: (${manifest.hash})`}
     </Text>
   </ScrollView>
 };
