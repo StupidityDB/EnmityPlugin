@@ -1,4 +1,4 @@
-import { name, links, version, hash } from '../../manifest.json';
+import { name, links, version, plugin } from '../../manifest.json';
 import { Dialog } from 'enmity/metro/common';
 import { reload } from 'enmity/api/native';
 import tryCallback from './try_callback';
@@ -14,15 +14,15 @@ async function checkForUpdates(): Promise<void> {
         const potentialExternalHash = content.match(/hash:"(.*?)"/)
 
         if (!potentialExternalVersion && !potentialExternalHash)
-            return failureUpdate(name, [version, hash]);
+            return failureUpdate(name, [version, plugin.hash]);
 
         const externalVersion = potentialExternalVersion && potentialExternalVersion[0];
         const externalHash = potentialExternalHash && potentialExternalHash[1]
 
         if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
-        if (externalHash && (externalHash != hash)) return showUpdateDialog(url, externalHash, 'build');
-        return noUpdates(name, [version, hash]);
-    }, [links, version, hash], name, 'checking if latest version at', 'the async check for updates callback');
+        if (externalHash && (externalHash != plugin.hash)) return showUpdateDialog(url, externalHash, 'build');
+        return noUpdates(name, [version, plugin.hash]);
+    }, [links, version, plugin], name, 'checking if latest version at', 'the async check for updates callback');
 }
 
 const showUpdateDialog = (url: string, updateLabel: string, updateType: string): void => {
