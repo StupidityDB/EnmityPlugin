@@ -1,6 +1,5 @@
 import { TouchableOpacity, View, Image } from "enmity/components";
-import { Toasts } from "enmity/metro/common";
-import React from "react";
+import { Toasts, React } from "enmity/metro/common";
 
 export const Badge = ({ name, image }: { name: string, image: string }) => {
     const styles = {
