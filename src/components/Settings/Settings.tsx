@@ -16,7 +16,7 @@ const optionalMargin = parseInt(version?.split(".")[0]) > 163 ? 15 : 0;
 
 export default ({ manifest }: SettingsProps) => {
   return <ScrollView>
-    <Credits manifest={manifest} /* main credits gui, created from scratch exclusively for dislate */ />
+    <Credits manifest={manifest} />
     <SectionWrapper label="Authentication">
       <View style={styles.formrowContainer}>
         <FormRow
