@@ -8,6 +8,7 @@ import manifest from "../manifest.json";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
+import { PossibleBadgeProps } from "./common/types";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -34,27 +35,33 @@ const ReviewDB: Plugin = {
     const admins = await fetch(manifest.links.api + "/admins")
       .then(res => res.json())
 
+    const pushPossibleBadge = ({ res, name, image, ensure }: PossibleBadgeProps) => {
+      if (ensure) {
+        const RenderableBadge = () => <Badge 
+          name={name}
+          image={image}
+        />
+
+        if (res.props.badges) res.props.badges.push(<RenderableBadge />);
+        else res.props.children.push(<RenderableBadge />);
+      }
+    }
+
     for (const profileBadge of ProfileBadges) {
       Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
-        const AdminBadge = () => <Badge 
-          name={"ReviewDB Administrator"} 
-          image={"https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"} 
-        />;
+        pushPossibleBadge({
+          res,
+          name: "ReviewDB Administrator",
+          image: "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128",
+          ensure: admins.includes(id)
+        });
 
-        const DeveloperBadge = () => <Badge 
-          name={"Enmity ReviewDB Developer"} 
-          image={"https://cdn.discordapp.com/emojis/884010019543212053.gif?size=128"}        
-        />;
-
-        if (admins.includes(id)) {
-          if (res.props.badges) res.props.badges.push(<AdminBadge />);
-          else res.props.children.push(<AdminBadge />);
-        }
-
-        if (manifest.authors.find(author => author.id === id)) {
-          if (res.props.badges) res.props.badges.push(<DeveloperBadge />);
-          else res.props.children.push(<DeveloperBadge />);
-        }
+        pushPossibleBadge({
+          res,
+          name: "Enmity ReviewDB Developer",
+          image: "https://cdn.discordapp.com/emojis/884010019543212053.gif?size=128",
+          ensure: Boolean(manifest.authors.find(author => author.id === id))
+        })
       });
     }
 

@@ -35,6 +35,13 @@ export interface ShowAlert {
     placeholder?: string;
 }
 
+export interface PossibleBadgeProps {
+    res: any;
+    name: string;
+    image: string;
+    ensure: boolean;
+}
+
 export interface ButtonProps {
     text: string;
     image?: string;
