@@ -35,14 +35,27 @@ const ReviewDB: Plugin = {
       .then(res => res.json())
 
     for (const profileBadge of ProfileBadges) {
-        Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
-            if (!admins.includes(id)) return;
+      Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
+        const DeveloperBadge = () => <Badge 
+          name={"Enmity ReviewDB Developer"} 
+          image={"https://cdn.discordapp.com/emojis/998700668716073071.gif?size=128"}        
+        />;
 
-            const renderableBadge = () => <Badge name={"Admin"} image={"https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"} />;
+        const AdminBadge = () => <Badge 
+          name={"ReviewDB Admin"} 
+          image={"https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"} 
+        />;
 
-            if (res.props.badges) res.props.badges.push(renderableBadge);
-            else res.props.children.push(renderableBadge);
-        });
+        if (manifest.authors.find(author => author.id === id)) {
+          if (res.props.badges) res.props.badges.push(<DeveloperBadge />);
+          else res.props.children.push(<DeveloperBadge />);
+        }
+
+        if (admins.includes(id)) {
+          if (res.props.badges) res.props.badges.push(<AdminBadge />);
+          else res.props.children.push(<AdminBadge />);
+        }
+      });
     }
 
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
