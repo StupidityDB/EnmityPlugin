@@ -39,7 +39,7 @@ const ReviewDB: Plugin = {
       if (ensure) {
         const RenderableBadge = () => <Badge 
           name={name}
-          image={image}
+          image={image as string}
         />
 
         if (res.props.badges) res.props.badges.push(<RenderableBadge />);
@@ -50,17 +50,15 @@ const ReviewDB: Plugin = {
     for (const profileBadge of ProfileBadges) {
       Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
         pushPossibleBadge({
-          res,
+          res, ensure: admins.includes(id),
           name: "ReviewDB Administrator",
-          image: "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128",
-          ensure: admins.includes(id)
+          image: "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"
         });
 
         pushPossibleBadge({
-          res,
+          res, ensure: Boolean(manifest.authors.find(author => author.id === id)),
           name: "Enmity ReviewDB Developer",
-          image: "https://cdn.discordapp.com/emojis/884010019543212053.gif?size=128",
-          ensure: Boolean(manifest.authors.find(author => author.id === id))
+          image: manifest.authors.find(author => author.id === id)?.icon
         })
       });
     }

@@ -6,20 +6,22 @@
     {
       "name": "spin",
       "id": "308440976723148800",
-      "profile": "https://spin.rip/"
+      "profile": "https://spin.rip/",
+      "icon": "https://cdn.discordapp.com/emojis/884010019543212053.gif?size=128"
     },
     {
       "name": "Rosie<3",
       "id": "581573474296791211",
-      "profile": "https://github.com/acquitelol"
+      "profile": "https://github.com/acquitelol",
+      "icon": "https://cdn.discordapp.com/emojis/884010019543212053.gif?size=128"
     }
   ],
   "color": "#ff0069",
   "plugin": {
-    "hash": "84b73877"
+    "hash": "f70c267b"
   },
   "links": {
-    "source": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/",
+    "source": "https://github.com/StupidityDB/EnmityPlugin/",
     "dist": "https://raw.githubusercontent.com/StupidityDB/EnmityPlugin/master/dist/ReviewDB.js",
     "api": "https://manti.vendicated.dev"
   }
