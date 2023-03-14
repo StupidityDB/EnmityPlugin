@@ -157,8 +157,8 @@ const styles = StyleSheet.createThemedStyleSheet({
 
   // styles for badge
   rdbBadge: {
-    width: AUTHOR_SIZE,
-    height: AUTHOR_SIZE,
+    width: AUTHOR_SIZE * 0.85,
+    height: AUTHOR_SIZE * 0.85,
     marginTop: 1,
     marginLeft: 4,
   },

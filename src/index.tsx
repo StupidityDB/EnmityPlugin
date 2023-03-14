@@ -1,15 +1,17 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
-import { getByProps } from "enmity/metro";
+import { getByName, getByProps } from "enmity/metro";
 import { React, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
+import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
+const ProfileBadges = getByName("ProfileBadges", { all: true, default: false });
 
 const ReviewDB: Plugin = {
   ...manifest,
@@ -32,10 +34,17 @@ const ReviewDB: Plugin = {
     const admins = await fetch(manifest.links.api + "/admins")
       .then(res => res.json())
 
-    /*
-      massive huge thanks to rosie. :3
-      https://github.com/acquitelol
-    */
+    for (const profileBadge of ProfileBadges) {
+        Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
+            if (!admins.includes(id)) return;
+
+            const renderableBadge = () => <Badge name={"Admin"} image={"https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"} />;
+
+            if (res.props.badges) res.props.badges.push(renderableBadge);
+            else res.props.children.push(renderableBadge);
+        });
+    }
+
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
       const profileCardSection = findInReactTree(res, r =>
         r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")

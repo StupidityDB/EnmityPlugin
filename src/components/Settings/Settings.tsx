@@ -1,7 +1,7 @@
 // main imports of elements and dependencies
 import { FormDivider, FormRow, ScrollView, View, Text, FormInput } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
-import { Native, React } from 'enmity/metro/common';
+import { React } from 'enmity/metro/common';
 import Credits from '../Dependent/Credits';
 import { Updater, Icons } from '../../common';
 import SectionWrapper from '../Wrappers/SectionWrapper';
@@ -9,10 +9,10 @@ import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../common/types';
 import { showOAuth2Modal } from '../../common/RDBAPI';
 import { get, set } from 'enmity/api/settings';
+import { version } from 'enmity/api/native';
 
 const Router = getByProps("openURL", "transitionToGuild");
-const { Version } = Native.InfoDictionaryManager;
-const optionalMargin = parseInt(Version?.split(".")[0]) > 163 ? 15 : 0;
+const optionalMargin = parseInt(version?.split(".")[0]) > 163 ? 15 : 0;
 
 export default ({ manifest }: SettingsProps) => {
   return <ScrollView>
