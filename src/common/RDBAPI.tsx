@@ -57,7 +57,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
 
           if (success) {
             // success! we can set the token
-            set(manifest.name, "rdbToken", token as string)
+            set(manifest.name, "rdbToken", token!)
           } 
 
           // failure :c
@@ -77,7 +77,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
 
 export async function getReviews(userID: string) {
   try {
-    const res = await fetch(`${manifest.links.api}/api/reviewdb?snowflakeFormat=string&discordid=${userID}`, {
+    const res = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews`, {
       method: "GET",
     });
 
@@ -97,10 +97,10 @@ export async function getReviews(userID: string) {
   }
 }
 
-export async function addReview(review: any) {
+export async function addReview(review: any, userID: string) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.links.api + "/api/reviewdb", {
+  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}`, {
     method: "PUT",
     body: JSON.stringify(review),
     headers: {
@@ -118,10 +118,10 @@ export async function addReview(review: any) {
   return console.log("[ReviewDB]", Response[message] ?? Response.error);
 }
 
-export async function deleteReview(id: number) {
+export async function deleteReview(id: number, userID: string) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(manifest.links.api + "/api/reviewdb", {
+  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}`, {
     method: "DELETE",
     headers: new Headers({
       "Content-Type": "application/json",
@@ -144,8 +144,8 @@ export async function deleteReview(id: number) {
 export async function reportReview(id: number) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const res = await fetch(manifest.links.api + "/api/reviewdb", {
-    method: "REPORT",
+  const res = await fetch(`${manifest.links.api}/api/reviewdb/reports`, {
+    method: "PUT",
     headers: new Headers({
       "Content-Type": "application/json",
       Accept: "application/json",

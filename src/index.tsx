@@ -8,7 +8,7 @@ import manifest from "../manifest.json";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
-import { PossibleBadgeProps } from "./common/types";
+import { PossibleBadgeProps, Badge as BadgeType } from "./common/types";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -32,14 +32,17 @@ const ReviewDB: Plugin = {
 
     ensureCurrentUserInitialized();
 
-    const admins = await fetch(manifest.links.api + "/admins")
-      .then(res => res.json())
+    const admins: string[] = await fetch(manifest.links.api + "/admins")
+      .then(res => res.json());
+
+    const badges: BadgeType[] = await fetch(manifest.links.api + "/api/reviewdb/badges")
+      .then(res => res.json());
 
     const pushPossibleBadge = ({ res, name, image, ensure }: PossibleBadgeProps) => {
       if (ensure) {
         const RenderableBadge = () => <Badge 
           name={name}
-          image={image as string}
+          image={image!}
         />
 
         if (res.props.badges) res.props.badges.push(<RenderableBadge />);
@@ -49,16 +52,19 @@ const ReviewDB: Plugin = {
 
     for (const profileBadge of ProfileBadges) {
       Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
-        pushPossibleBadge({
-          res, ensure: admins.includes(id),
-          name: "ReviewDB Administrator",
-          image: "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128"
-        });
+        badges.forEach(badgeObject => {
+          pushPossibleBadge({
+            res, ensure: badgeObject.discordID === id,
+            name: badgeObject.name,
+            image: badgeObject.icon
+          });
+        })
 
+        const possibleAuthor = manifest.authors.find(author => author.id === id);
         pushPossibleBadge({
-          res, ensure: Boolean(manifest.authors.find(author => author.id === id)),
+          res, ensure: Boolean(possibleAuthor),
           name: "Enmity ReviewDB Developer",
-          image: manifest.authors.find(author => author.id === id)?.icon
+          image: possibleAuthor?.icon
         })
       });
     }

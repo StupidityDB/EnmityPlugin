@@ -66,10 +66,9 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
             onConfirm: (input: string, setInput: Function) => {
               if (input) {
                 addReview({
-                  "userid": userID,
                   "comment": input.trim(),
                   "token": get(manifest.name, "rdbToken", "")
-                }).then(() => setInput?.(""));
+                }, userID).then(() => setInput(""));
               } else {
                 Toasts.open({
                   content: "Please enter a review before submitting.",

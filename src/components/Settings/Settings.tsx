@@ -12,7 +12,7 @@ import { get, set } from 'enmity/api/settings';
 import { version } from 'enmity/api/native';
 
 const Router = getByProps("openURL", "transitionToGuild");
-const optionalMargin = parseInt(version?.split(".")[0]) > 163 ? 15 : 0;
+const optionalMargin = parseInt(version.split(".")[0]) > 163 ? 15 : 0;
 
 export default ({ manifest }: SettingsProps) => {
   return <ScrollView>

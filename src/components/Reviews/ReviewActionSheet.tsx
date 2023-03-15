@@ -60,7 +60,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
           image="ic_message_delete"
           dangerous
           onPress={() => {
-            deleteReview(review["id"]).then(() => {
+            deleteReview(review["id"], review["sender"]["discordID"]).then(() => {
               onConfirm()
             })
           }}

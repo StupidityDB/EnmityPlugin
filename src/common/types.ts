@@ -26,6 +26,15 @@ export interface Endpoint {
     token?: string;
 }
 
+export interface Badge {
+    name: string;
+    icon: string;
+    redirectURL: string;
+    type: number;
+    description: string;
+    discordID: string;
+}
+
 export interface ShowAlert {
     title: string;
     userID: string;
