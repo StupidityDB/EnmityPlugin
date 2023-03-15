@@ -1,7 +1,7 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { React, Users } from "enmity/metro/common";
+import { React, Users, Toasts } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
@@ -9,6 +9,7 @@ import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
 import { PossibleBadgeProps, Badge as BadgeType } from "./common/types";
+import { Icons } from "./common";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -37,6 +38,27 @@ const ReviewDB: Plugin = {
 
     const badges: BadgeType[] = await fetch(manifest.links.api + "/api/reviewdb/badges")
       .then(res => res.json());
+
+    if (get(manifest.name, "rdbToken", "")) {
+      fetch(manifest.links.api + "/api/reviewdb/users", {
+        method: "POST",
+        body: JSON.stringify({
+          token: get(manifest.name, "rdbToken", "")
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }).then(res => res.json())
+        .then(res => {
+          if ((res["lastReviewID"] ?? 0) > (get(manifest.name, "lastReview", 0) as number)) {
+            Toasts.open({
+              source: Icons.Pencil,
+              content: "You have new reviews on your profile!"
+            })
+            set(manifest.name, "lastReview", res["lastReviewID"])
+          } 
+        })
+    }
 
     const pushPossibleBadge = ({ res, name, image, ensure }: PossibleBadgeProps) => {
       if (ensure) {
