@@ -121,7 +121,7 @@ export async function addReview(review: any, userID: string) {
 export async function deleteReview(id: number, userID: string) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}`, {
+  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews`, {
     method: "DELETE",
     headers: new Headers({
       "Content-Type": "application/json",
@@ -133,7 +133,7 @@ export async function deleteReview(id: number, userID: string) {
     })
   });
 
-  const { message }: Endpoint = await r.json();
+  const { message }: Endpoint = await r.json().catch(console.log);
 
   Toasts.open({
     content: (message ?? "Response is empty") + "!",
