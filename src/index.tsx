@@ -55,7 +55,7 @@ const ReviewDB: Plugin = {
               source: Icons.Pencil,
               content: "You have new reviews on your profile!"
             })
-            set(manifest.name, "lastReview", res["lastReviewID"])
+            set(manifest.name, "lastReview", res["lastReview"])
           } 
         })
     }
