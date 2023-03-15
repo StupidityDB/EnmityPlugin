@@ -60,31 +60,31 @@ const ReviewDB: Plugin = {
         })
     }
 
-    const pushPossibleBadge = ({ res, name, image, ensure }: PossibleBadgeProps) => {
-      if (ensure) {
-        const RenderableBadge = () => <Badge 
-          name={name}
-          image={image!}
-        />
-
-        if (res.props.badges) res.props.badges.push(<RenderableBadge />);
-        else res.props.children.push(<RenderableBadge />);
-      }
-    }
-
     for (const profileBadge of ProfileBadges) {
       Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
+        const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
+          if (ensure) {
+            const RenderableBadge = () => <Badge 
+              name={name}
+              image={image!}
+            />
+    
+            if (res.props.badges) res.props.badges.push(<RenderableBadge />);
+            else res.props.children.push(<RenderableBadge />);
+          }
+        }
+
         badges.forEach(badgeObject => {
-          pushPossibleBadge({
-            res, ensure: badgeObject.discordID === id,
+          pushBadge({
+            ensure: badgeObject.discordID === id,
             name: badgeObject.name,
             image: badgeObject.icon
           });
         })
 
         const possibleAuthor = manifest.authors.find(author => author.id === id);
-        pushPossibleBadge({
-          res, ensure: Boolean(possibleAuthor),
+        pushBadge({
+          ensure: Boolean(possibleAuthor),
           name: "Enmity ReviewDB Developer",
           image: possibleAuthor?.icon
         })
