@@ -16,8 +16,8 @@ const Clipboard = getByProps("setString");
 export function renderActionSheet(component: any, props: { [key: string]: any }) {
   ActionSheet
     ? LazyActionSheet?.openLazy(new Promise(r => r({ default: component })), "ReviewActionSheet", props)
-    : Toasts.open({ content: "You cannot open ActionSheets on this version! Upgrade to 163+", source: Icons.Failed })
-}
+    : Toasts.open({ content: "You cannot open ActionSheets on this version! Upgrade to 163+", source: Icons.Failed });
+};
 
 export default function ReviewActionSheet({ onConfirm, review, currentUserID, admins }: ReviewActionSheetProps) {
   // it is not scrollable, meaning the height is not predefined, and takes up however much is required to render the content, up to half of the screen.

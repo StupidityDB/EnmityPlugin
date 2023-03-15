@@ -1,4 +1,3 @@
-// main imports of elements and dependencies
 import { FormDivider, FormRow, ScrollView, View, Text, FormInput } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
 import { React } from 'enmity/metro/common';
@@ -49,9 +48,7 @@ export default ({ manifest }: SettingsProps) => {
           /* @ts-ignore */
           leading={<FormRow.Icon source={Icons.Copy} />}
           trailing={FormRow.Arrow}
-          onPress={() => {
-            Updater.checkForUpdates()
-          }}
+          onPress={() => Updater.checkForUpdates()}
         />
         <FormDivider />
         <FormRow

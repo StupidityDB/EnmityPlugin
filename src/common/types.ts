@@ -2,20 +2,13 @@ import { SettingsStore } from "enmity/api/settings";
 import manifest from "../../manifest.json";
 
 export interface Review {
-    id: number,
-    sender: { 
-        id: number,
-        discordID: string,
-        username: string,
-        profilePhoto: string,
-        badges: Array<{ 
-            name: string;
-            icon: string;
-        }> | [];
-    },
-    star: number,
-    comment: string,
-    type: 0 | 1 | 2 | 3,
+    id: number;
+    sender: Omit<User, "ID" | "clientMod" | "warningCount" | "banEndDate" | "lastReviewID"> | {
+        id: number;
+    };
+    star: number;
+    comment: string;
+    type: 0 | 1 | 2 | 3;
     timestamp: number
 }
 
@@ -35,6 +28,18 @@ export interface Badge {
     discordID: string;
 }
 
+export interface User {
+    ID: number;
+    discordID: string;
+    username: string;
+    profilePhoto: string;
+    clientMod: string;
+    warningCount: number;
+    banEndDate: string;
+    badges: Badge[]
+    lastReviewID: number;
+}
+
 export interface ShowAlert {
     title: string;
     userID: string;
@@ -46,7 +51,7 @@ export interface ShowAlert {
 
 export interface PossibleBadgeProps {
     name: string;
-    image: string | undefined;
+    image: string;
     ensure: boolean;
 }
 
@@ -86,7 +91,7 @@ export interface SettingsProps {
 };
 
 export interface SectionWrapperProps {
-    label: string, 
-    children?: any, 
-    style?: { [key: string]: any }
+    label: string; 
+    children?: any; 
+    style?: { [key: string]: any };
 }

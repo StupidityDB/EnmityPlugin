@@ -53,14 +53,14 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
           </Text>}
       </View>
       <Button
-        text={existingReview ? "Update Review" : "Create Review"}
+        text={`${existingReview ? "Update" : "Create"} Review`}
         image={existingReview ? "ic_edit_24px" : "img_nitro_star"}
         onPress={() => {
           // this does not need to be a seperate function as its only used once, but it is cleaner this way.
           // as this is now an alert which closes the profile, state is not required for this as the profile must be reopened, rendering the reviews anyways
           // hence, setting the new reviews is not required either. the only thing required is to set the input to "" to clear its content from beforehand.
           showAlert({
-            title: existingReview ? "Update Review" : "Create Review",
+            title: `${existingReview ? "Update" : "Create"} Review`,
             confirmText: existingReview ? "Update" : "Create",
             placeholder: `Tap here to ${existingReview ? "update your existing review" : "create a new review"}...`,
             onConfirm: (input: string, setInput: Function) => {

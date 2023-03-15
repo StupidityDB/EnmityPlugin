@@ -44,6 +44,17 @@ const styles = StyleSheet.createThemedStyleSheet({
     backgroundColor: Constants.ThemeColorMap.BACKGROUND_MOBILE_SECONDARY,
     ...Miscellaneous.shadow() /** @param shadow: Main shadow implementation */
   },
+  creditsContainer: {
+    paddingTop: 30,
+    paddingLeft: 20,
+    flexDirection: "row"
+  },
+  creditsTextContainer: {
+    paddingLeft: 15,
+    paddingTop: 5,
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+  },
 
   // styles for button
   button: {
@@ -116,6 +127,22 @@ const styles = StyleSheet.createThemedStyleSheet({
     fontFamily: Constants.Fonts.PRIMARY_BOLD,
     fontSize: 12
   },
+  creditsMainText: {
+    opacity: 0.975,
+    letterSpacing: 0.25,
+    fontFamily: Constants.Fonts.DISPLAY_NORMAL
+  },
+  creditsHeader: {
+    color: Constants.ThemeColorMap.HEADER_PRIMARY,
+    fontFamily: Constants.Fonts.DISPLAY_BOLD,
+    fontSize: 25,
+    letterSpacing: 0.25
+  },
+  creditsSubHeader: {
+    color: Constants.ThemeColorMap.HEADER_SECONDARY,
+    opacity: 0.975,
+    fontSize: 12.75,
+  },
   
   // styles for more obscure texts
   timestamp: {
@@ -181,6 +208,11 @@ const styles = StyleSheet.createThemedStyleSheet({
   safeIcon: {
     tintColor: Constants.ThemeColorMap.INTERACTIVE_NORMAL
   },
+  creditsImage: {
+    width: 75,
+    height: 75,
+    borderRadius: 10
+  },
 
   // styles for authentication page
   authContainer: {
@@ -202,7 +234,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     fontSize: 16,
     marginLeft: 16,
     backgroundColor: 'transparent'
-  },
+  }
 })
 
 export default styles;

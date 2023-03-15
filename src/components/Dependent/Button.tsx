@@ -26,4 +26,4 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
       ]}>{text}</Text>
     </TouchableOpacity>
   </View>
-}
+};

@@ -6,7 +6,7 @@ import styles from "../../common/StyleSheet";
 import { ShowAlert } from '../../common/types';
 
 export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, existing, placeholder }: ShowAlert) => {
-  const User = Users.getUser(userID)
+  const User = Users.getUser(userID);
 
   // dialogs can take `children` or `body` but not both.
   // `children` must take a component in jsx (<Component/>) and not an anonymous component(() => <Component/>)

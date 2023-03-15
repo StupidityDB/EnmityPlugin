@@ -30,14 +30,9 @@ export default ({ component = View } = {}) => {
                 </>
             }}
             options={{
-                headerLeft: () => (
-                <TouchableOpacity 
-                    onPress={(): void => {
-                        Navigation.pop()
-                    }}
-                >
-                    <Text style={styles.authText}>{"Close"}</Text>
-                </TouchableOpacity>),
+                headerLeft: () => <TouchableOpacity onPress={() => Navigation.pop()}>
+                  <Text style={styles.authText}>{"Close"}</Text>
+                </TouchableOpacity>,
             }}
       />
     </PageNavigator.Navigator>

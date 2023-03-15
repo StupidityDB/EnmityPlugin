@@ -5,23 +5,25 @@ import tryCallback from './try_callback';
 
 async function checkForUpdates(): Promise<void> {
     await tryCallback(async function () {
+        
         const url = `${links.dist}?${Math.floor(Math.random() * 1001)}.js`;
 
         const res: Response = await fetch(url);
         const content: string = await res.text();
 
-        const potentialExternalVersion = content.match(/\d+\.\d+\.\d+/g)
-        const potentialExternalHash = content.match(/hash:"(.*?)"/)
+        const potentialExternalVersion = content.match(/\d+\.\d+\.\d+/g);
+        const potentialExternalHash = content.match(/hash:"(.*?)"/);
 
         if (!potentialExternalVersion && !potentialExternalHash)
             return failureUpdate(name, [version, plugin.hash]);
 
         const externalVersion = potentialExternalVersion && potentialExternalVersion[0];
-        const externalHash = potentialExternalHash && potentialExternalHash[1]
+        const externalHash = potentialExternalHash && potentialExternalHash[1];
 
         if (externalVersion && (externalVersion != version)) return showUpdateDialog(url, externalVersion, 'version');
         if (externalHash && (externalHash != plugin.hash)) return showUpdateDialog(url, externalHash, 'build');
         return noUpdates(name, [version, plugin.hash]);
+
     }, [links, version, plugin], name, 'checking if latest version at', 'the async check for updates callback');
 }
 
