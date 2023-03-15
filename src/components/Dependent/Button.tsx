@@ -12,16 +12,16 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
     >
       {/* @ts-ignore ~ cannot assign actual props to intrinsic attributes, i can confirm this works */}
       <FormRow.Icon source={getIDByName(image)} style={[
-        styles.icon, 
-        dangerous 
+        styles.icon,
+        dangerous
           ? styles.dangerousIcon
           : styles.safeIcon
       ]} />
       <Text style={[
-        styles.text, 
-        dangerous 
-          ? styles.dangerousText 
-          : styles.safeText, 
+        styles.text,
+        dangerous
+          ? styles.dangerousText
+          : styles.safeText,
         styles.buttonText
       ]}>{text}</Text>
     </TouchableOpacity>

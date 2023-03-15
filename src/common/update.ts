@@ -1,11 +1,11 @@
-import { name, links, version, plugin } from '../../manifest.json';
-import { Dialog } from 'enmity/metro/common';
 import { reload } from 'enmity/api/native';
+import { Dialog } from 'enmity/metro/common';
+import { links, name, plugin, version } from '../../manifest.json';
 import tryCallback from './try_callback';
 
 async function checkForUpdates(): Promise<void> {
     await tryCallback(async function () {
-        
+
         const url = `${links.dist}?${Math.floor(Math.random() * 1001)}.js`;
 
         const res: Response = await fetch(url);
@@ -31,8 +31,8 @@ const showUpdateDialog = (url: string, updateLabel: string, updateType: string):
     Dialog.show({
         title: 'Update found',
         body: `A newer ${updateType} is available for ${name}. ${
-            updateType == 'build' 
-                ? `\nThe version will remain at ${version}, but the build will update to ${updateLabel}.` 
+            updateType == 'build'
+                ? `\nThe version will remain at ${version}, but the build will update to ${updateLabel}.`
                 : ''
         }\nWould you like to install ${updateType} \`${updateLabel}\` now?`,
         confirmText: 'Update',

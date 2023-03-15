@@ -143,7 +143,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     opacity: 0.975,
     fontSize: 12.75,
   },
-  
+
   // styles for more obscure texts
   timestamp: {
     color: Constants.ThemeColorMap.HEADER_PRIMARY,
@@ -189,7 +189,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     marginTop: 1,
     marginLeft: 4,
   },
-  
+
   // styles for icons in actionsheet buttons
   icon: {
     width: 16,

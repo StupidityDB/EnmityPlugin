@@ -1,10 +1,10 @@
 import { get, set } from 'enmity/api/settings';
 import { getByName } from 'enmity/metro';
-import { Dialog, Navigation, Toasts, React } from 'enmity/metro/common';
-import { Icons } from './'
+import { Dialog, Navigation, React, Toasts } from 'enmity/metro/common';
 import manifest from "../../manifest.json";
 import Page from '../components/Dependent/Page';
-import { Review, Endpoint } from './types';
+import { Icons } from './';
+import { Endpoint, Review } from './types';
 
 const getRdbToken = () => get(manifest.name, "rdbToken", "");
 const OAuth2AuthorizeModal = getByName("OAuth2AuthorizeModal");
@@ -37,9 +37,9 @@ const checkToken = (): boolean => {
   return true;
 }
 
-export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == "" 
+export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
   ? Navigation.push(Page, {
-    component: () => <OAuth2AuthorizeModal 
+    component: () => <OAuth2AuthorizeModal
       clientId="915703782174752809"
       redirectUri={manifest.links.api + "/api/reviewdb/auth"}
       scopes={["identify"]}
@@ -58,7 +58,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
           if (success) {
             // success! we can set the token
             set(manifest.name, "rdbToken", token!)
-          } 
+          }
 
           // failure :c
           throw new Error(`Status returned by backend was not OK: ${message}`);
@@ -69,7 +69,7 @@ export const showOAuth2Modal = () => get(manifest.name, "rdbToken", "") == ""
       }}
       dismissOAuthModal={() => Navigation.pop()}
     />
-  }) 
+  })
   : Toasts.open({
     content: "You already have a token set!",
     source: Icons.Self
@@ -86,7 +86,7 @@ export async function getReviews(userID: string) {
     if (success) {
       return reviews;
     }
-    
+
     throw new Error("Error when getting reviews: " + message);
   } catch (err) {
     Toasts.open({
@@ -175,7 +175,7 @@ export async function reportReview(id: number) {
 // }
 
 export const canDeleteReview = (
-  review: Review, 
-  currentUserID: string, 
+  review: Review,
+  currentUserID: string,
   admins: string[]
 ) => admins.includes(currentUserID) ?? review["sender"]["discordID"] == currentUserID;

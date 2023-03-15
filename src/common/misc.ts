@@ -17,7 +17,7 @@ const shadow = (opacity: number = 0.10): DefaultObject => ({
     elevation: 8
 });
 
-/** 
+/**
  * Open a toast with the text provided saying it has been copied to clipboard or as a tooltip
  * @param {string} source: The text provided to send inside of the toast
  * @param {'clipboard | 'tooltip'} type: The type of toast to show.
@@ -26,13 +26,13 @@ const shadow = (opacity: number = 0.10): DefaultObject => ({
  * @returns {void}
  */
 const displayToast = (source: string, type: 'clipboard' | 'tooltip'): void => {
-    Toasts.open({ 
-        content: type=='clipboard' ? `Copied ${source} to clipboard.` : source, 
-        source: type=='clipboard' ? Icons.Clipboard : Icons.Self 
+    Toasts.open({
+        content: type=='clipboard' ? `Copied ${source} to clipboard.` : source,
+        source: type=='clipboard' ? Icons.Clipboard : Icons.Self
     });
 };
 
-export default 
+export default
 {
     shadow,
     displayToast

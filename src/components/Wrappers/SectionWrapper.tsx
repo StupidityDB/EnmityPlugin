@@ -1,7 +1,7 @@
-import { View, Text } from "enmity/components"
-import { React } from "enmity/metro/common"
-import { SectionWrapperProps } from "../../common/types";
+import { Text, View } from "enmity/components";
+import { React } from "enmity/metro/common";
 import styles from '../../common/StyleSheet';
+import { SectionWrapperProps } from "../../common/types";
 
 export default ({ label, children, style }: SectionWrapperProps) => {
     return <View style={[style, {marginTop: 10}]}>

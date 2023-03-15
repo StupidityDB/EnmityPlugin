@@ -91,7 +91,7 @@ export interface SettingsProps {
 };
 
 export interface SectionWrapperProps {
-    label: string; 
-    children?: any; 
+    label: string;
+    children?: any;
     style?: { [key: string]: any };
 }

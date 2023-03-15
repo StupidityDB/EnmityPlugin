@@ -1,5 +1,5 @@
-import { React, Navigation, NavigationNative, NavigationStack, Constants } from 'enmity/metro/common';
-import { TouchableOpacity, Text, View } from 'enmity/components';
+import { Text, TouchableOpacity, View } from 'enmity/components';
+import { Constants, Navigation, NavigationNative, NavigationStack, React } from 'enmity/metro/common';
 import styles from '../../common/StyleSheet';
 const PageNavigator = NavigationStack.createStackNavigator();
 
@@ -20,9 +20,9 @@ export default ({ component = View } = {}) => {
         },
       }}
     >
-       <PageNavigator.Screen
+      <PageNavigator.Screen
             name={""}
-            component={() => { 
+            component={() => {
                 const Component = component;
                 return <>
                     <View style={{ marginTop: -45 }} />

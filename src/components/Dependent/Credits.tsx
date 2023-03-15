@@ -62,16 +62,16 @@ export default ({ manifest }: CreditsProps) => {
                 <Text style={[styles.creditsMainText, styles.creditsSubHeader]}>
                     A plugin by
                 </Text>
-                {manifest.authors.map((author, index: number, authorsArray: any[]) => { 
-                    return <TouchableOpacity onPress={(): void => Router.openURL(author.profile)}> 
-                        <Text 
+                {manifest.authors.map((author, index: number, authorsArray: any[]) => {
+                    return <TouchableOpacity onPress={(): void => Router.openURL(author.profile)}>
+                        <Text
                             style={[styles.creditsMainText, styles.safeText, styles.creditsSubHeader, {
                                 paddingLeft: 4,
                                 fontFamily: Constants.Fonts.DISPLAY_BOLD,
                                 flexDirection: 'row'
                             }]
-                        }>
-                                {author.name}{index < (authorsArray.length - 1) ? "," : null}
+                            }>
+                            {author.name}{index < (authorsArray.length - 1) ? "," : null}
                         </Text>
                     </TouchableOpacity>
                 })}

@@ -2,15 +2,15 @@ import { get } from "enmity/api/settings";
 import { Text, View } from 'enmity/components';
 import { getByProps } from "enmity/metro";
 import { React, Toasts, Users } from "enmity/metro/common";
-import { Icons } from "../../common";
 import manifest from "../../../manifest.json";
-import showAlert from "../Dependent/Alert";
-import Button from "../Dependent/Button";
+import { Icons } from "../../common";
 import { addReview, getReviews } from '../../common/RDBAPI';
-import Review from "./Review";
-import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 import styles from "../../common/StyleSheet";
 import { Review as ReviewType, ReviewsSectionProps } from '../../common/types';
+import showAlert from "../Dependent/Alert";
+import Button from "../Dependent/Button";
+import Review from "./Review";
+import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 
@@ -38,7 +38,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
           ? reviews.map((review: ReviewType) => <Review
               review={review}
               onSubmit={() => renderActionSheet(ReviewActionSheet, {
-                  onConfirm: () => LazyActionSheet?.hideActionSheet(), 
+                  onConfirm: () => LazyActionSheet?.hideActionSheet(),
                   review, currentUserID, admins
                 })
               }

@@ -1,15 +1,15 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { React, Users, Toasts } from "enmity/metro/common";
+import { React, Toasts, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
+import { Icons } from "./common";
+import { Badge as BadgeType, PossibleBadgeProps, User } from "./common/types";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
-import { PossibleBadgeProps, Badge as BadgeType, User } from "./common/types";
-import { Icons } from "./common";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -71,11 +71,11 @@ const ReviewDB: Plugin = {
 
         const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
           if (ensure) {
-            const RenderableBadge = () => <Badge 
+            const RenderableBadge = () => <Badge
               name={name}
               image={image}
             />;
-    
+
             if (res.props.badges) res.props.badges.push(<RenderableBadge />);
             else res.props.children.push(<RenderableBadge />);
           };

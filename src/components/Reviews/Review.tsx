@@ -1,10 +1,9 @@
-import { Image, Text, TouchableOpacity, View, FormRow } from "enmity/components";
+import { FormRow, Image, Text, TouchableOpacity, View } from "enmity/components";
 import { bulk, filters } from "enmity/metro";
-import { Profiles, React, Users } from 'enmity/metro/common';
+import { Profiles, React, Toasts, Users } from 'enmity/metro/common';
+import { Icons } from '../../common';
 import styles from "../../common/StyleSheet";
 import { ReviewProps } from "../../common/types";
-import { Toasts } from 'enmity/metro/common';
-import { Icons } from '../../common';
 
 const [
   { ProfileGradientCard }, // used to render a card with the external colors being the user's profile theme. requires padding tobe set as a result.
@@ -19,11 +18,11 @@ export default ({ review, onSubmit }: ReviewProps) => {
 
   React.useEffect(() => {
     Boolean(review["timestamp"]) && setFormattedTime(new Date(review["timestamp"] * 1000)
-        .toLocaleString(undefined, { 
-            hour: 'numeric', 
-            minute: 'numeric', 
-            day: 'numeric', 
-            month: 'numeric', 
+        .toLocaleString(undefined, {
+            hour: 'numeric',
+            minute: 'numeric',
+            day: 'numeric',
+            month: 'numeric',
             year: 'numeric' })
         .split(",")
         .map(component => component.replace(/ /g, ""))
@@ -65,17 +64,17 @@ export default ({ review, onSubmit }: ReviewProps) => {
           >
             {/* @ts-ignore */}
             <FormRow.Icon source={Icons.Warning} style={[
-              styles.systemIcon, 
+              styles.systemIcon,
               styles.dangerousIcon
             ]} />
             <Text style={[
               styles.text,
-              styles.mainText, 
+              styles.mainText,
               styles.dangerousText,
               styles.systemText
             ]}>
               SYSTEM
-            </Text> 
+            </Text>
           </TouchableOpacity>}
           {Boolean(review["sender"]["badges"]?.length > 0) && review["sender"]["badges"].map(badge => <TouchableOpacity
             onPress={() => Toasts.open({
@@ -92,8 +91,8 @@ export default ({ review, onSubmit }: ReviewProps) => {
               }}
             />
           </TouchableOpacity>)}
-          {Boolean(review["timestamp"]) && <Text style={{ 
-              ...styles.mainText, 
+          {Boolean(review["timestamp"]) && <Text style={{
+              ...styles.mainText,
               ...styles.timestamp
           }}>
             {formattedTime}

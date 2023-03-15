@@ -1,14 +1,14 @@
-import { FormDivider, FormRow, ScrollView, View, Text, FormInput } from 'enmity/components';
+import { version } from 'enmity/api/native';
+import { get, set } from 'enmity/api/settings';
+import { FormDivider, FormInput, FormRow, ScrollView, Text, View } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
 import { React } from 'enmity/metro/common';
-import Credits from '../Dependent/Credits';
-import { Updater, Icons } from '../../common';
-import SectionWrapper from '../Wrappers/SectionWrapper';
+import { Icons, Updater } from '../../common';
+import { showOAuth2Modal } from '../../common/RDBAPI';
 import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../common/types';
-import { showOAuth2Modal } from '../../common/RDBAPI';
-import { get, set } from 'enmity/api/settings';
-import { version } from 'enmity/api/native';
+import Credits from '../Dependent/Credits';
+import SectionWrapper from '../Wrappers/SectionWrapper';
 
 const Router = getByProps("openURL", "transitionToGuild");
 const optionalMargin = parseInt(version.split(".")[0]) > 163 ? 15 : 0;
@@ -23,7 +23,7 @@ export default ({ manifest }: SettingsProps) => {
           label="Authenticate with ReviewDB"
           subLabel="Open a modal to authenticate your account with the ReviewDB API."
           // @ts-ignore
-          trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }}/>}
+          trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }} />}
           // @ts-ignore
           leading={<FormRow.Icon source={Icons.Self} />}
           onPress={() => showOAuth2Modal()}
@@ -32,8 +32,8 @@ export default ({ manifest }: SettingsProps) => {
         <FormInput
           placeholder="Your token goes here"
           value={get(manifest.name, "rdbToken", "")}
-          onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value) 
-            ? set(manifest.name, "rdbToken", value.trim()) 
+          onChange={(value: string) => (/^[A-Za-z0-9]{30,32}$/.test(value)
+            ? set(manifest.name, "rdbToken", value.trim())
             : set(manifest.name, "rdbToken", ""))}
           title="ReviewDB Authentication Token"
         />

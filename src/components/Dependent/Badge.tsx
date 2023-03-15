@@ -1,5 +1,5 @@
-import { TouchableOpacity, View, Image } from "enmity/components";
-import { Toasts, React } from "enmity/metro/common";
+import { Image, TouchableOpacity, View } from "enmity/components";
+import { React, Toasts } from "enmity/metro/common";
 
 export const Badge = ({ name, image }: { name: string, image: string }) => {
     const styles = {
@@ -17,10 +17,10 @@ export const Badge = ({ name, image }: { name: string, image: string }) => {
     };
 
     return <View style={styles.wrapper}>
-        <TouchableOpacity 
-            onPress={() => Toasts.open({ 
-                content: name, 
-                source: { uri: image } 
+        <TouchableOpacity
+            onPress={() => Toasts.open({
+                content: name,
+                source: { uri: image }
             })}
         >
             <Image style={styles.image} source={{ uri: image }} />
