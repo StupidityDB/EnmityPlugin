@@ -1,5 +1,5 @@
 import { SettingsStore } from "enmity/api/settings";
-import manifest from "../../manifest.json";
+import manifest from "../manifest.json";
 
 export interface Review {
     id: number;

@@ -2,7 +2,7 @@ import { getIDByName } from 'enmity/api/assets';
 import { FormRow, Text, TouchableOpacity, View } from "enmity/components";
 import { React } from "enmity/metro/common";
 import styles from "../../common/StyleSheet";
-import { ButtonProps } from '../../common/types';
+import { ButtonProps } from '../../def';
 
 export default function Button({ text, image = "ic_new_group", dangerous, onPress, style }: ButtonProps) {
   return <View style={[styles.buttonContainer, style]}>

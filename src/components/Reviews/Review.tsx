@@ -3,7 +3,7 @@ import { bulk, filters } from "enmity/metro";
 import { Profiles, React, Toasts, Users } from 'enmity/metro/common';
 import { Icons } from '../../common';
 import styles from "../../common/StyleSheet";
-import { ReviewProps } from "../../common/types";
+import { ReviewProps } from "../../def";
 
 const [
   { ProfileGradientCard }, // used to render a card with the external colors being the user's profile theme. requires padding tobe set as a result.

@@ -3,7 +3,7 @@ import { FormInput, Text, View } from "enmity/components";
 import { Dialog, React, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
 import styles from "../../common/StyleSheet";
-import { ShowAlert } from '../../common/types';
+import { ShowAlert } from '../../def';
 
 export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, existing, placeholder }: ShowAlert) => {
   const User = Users.getUser(userID);

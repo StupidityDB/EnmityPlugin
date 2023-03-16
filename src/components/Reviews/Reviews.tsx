@@ -6,7 +6,7 @@ import manifest from "../../../manifest.json";
 import { Icons } from "../../common";
 import { addReview, getReviews } from '../../common/RDBAPI';
 import styles from "../../common/StyleSheet";
-import { Review as ReviewType, ReviewsSectionProps } from '../../common/types';
+import { Review as ReviewType, ReviewsSectionProps } from '../../def';
 import showAlert from "../Dependent/Alert";
 import Button from "../Dependent/Button";
 import Review from "./Review";

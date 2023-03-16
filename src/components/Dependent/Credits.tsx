@@ -4,7 +4,7 @@ import { bulk, filters } from 'enmity/metro';
 import { Constants, React } from 'enmity/metro/common';
 import { Miscellaneous } from '../../common';
 import styles from '../../common/StyleSheet';
-import { CreditsProps } from '../../common/types';
+import { CreditsProps } from '../../def';
 
 // @ts-ignore
 const Animated = window.enmity.modules.common.Components.General.Animated

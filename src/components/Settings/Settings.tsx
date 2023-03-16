@@ -6,7 +6,7 @@ import { React } from 'enmity/metro/common';
 import { Icons, Updater } from '../../common';
 import { showOAuth2Modal } from '../../common/RDBAPI';
 import styles from '../../common/StyleSheet';
-import { SettingsProps } from '../../common/types';
+import { SettingsProps } from '../../def';
 import Credits from '../Dependent/Credits';
 import SectionWrapper from '../Wrappers/SectionWrapper';
 

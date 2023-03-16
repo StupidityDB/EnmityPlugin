@@ -4,7 +4,7 @@ import { getByProps, getModule } from "enmity/metro";
 import { React, Toasts } from "enmity/metro/common";
 import { Icons } from "../../common";
 import { canDeleteReview, deleteReview, reportReview } from '../../common/RDBAPI';
-import { ReviewActionSheetProps } from '../../common/types';
+import { ReviewActionSheetProps } from '../../def';
 import Button from "../Dependent/Button";
 import Review from './Review';
 

@@ -4,7 +4,7 @@ import { Dialog, Navigation, React, Toasts } from 'enmity/metro/common';
 import manifest from "../../manifest.json";
 import Page from '../components/Dependent/Page';
 import { Icons } from './';
-import { Endpoint, Review } from './types';
+import { Endpoint, Review } from '../def';
 
 const getRdbToken = () => get(manifest.name, "rdbToken", "");
 const OAuth2AuthorizeModal = getByName("OAuth2AuthorizeModal");
@@ -100,7 +100,7 @@ export async function getReviews(userID: string) {
 export async function addReview(review: any, userID: string) {
   if (!checkToken()) return new Promise((_, reject) => reject("Invalid token!"));
 
-  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}`, {
+  const r = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews`, {
     method: "PUT",
     body: JSON.stringify(review),
     headers: {

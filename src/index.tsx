@@ -6,7 +6,7 @@ import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
 import { Icons } from "./common";
-import { Badge as BadgeType, PossibleBadgeProps, User } from "./common/types";
+import { Badge as BadgeType, PossibleBadgeProps, User } from "./def";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
