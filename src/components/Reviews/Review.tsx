@@ -76,7 +76,7 @@ export default ({ review, onSubmit }: ReviewProps) => {
               SYSTEM
             </Text>
           </TouchableOpacity>}
-          {Boolean(review["sender"]["badges"]?.length > 0) && review["sender"]["badges"].map(badge => <TouchableOpacity
+          {Boolean(review["sender"]["badges"]?.length > 0) && review["sender"]["badges"].map((badge: object) => <TouchableOpacity
             onPress={() => Toasts.open({
               source: {
                 uri: badge["icon"]

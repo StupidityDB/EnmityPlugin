@@ -5,6 +5,7 @@
   "license": "GPL-3.0",
   "author": "spinfal & rosie",
   "scripts": {
+    "server": "python -m http.server 8000",
     "debug": "cd ../enmity-debug && node .",
     "build": "rollup -c --configPlugin esbuild"
   },
