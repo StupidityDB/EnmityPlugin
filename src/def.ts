@@ -95,3 +95,9 @@ export interface SectionWrapperProps {
     children?: any;
     style?: { [key: string]: any };
 }
+
+export interface ConditionalSwappableProps {
+    condition: boolean;
+    north: React.ReactElement
+    south: React.ReactElement
+}
