@@ -1,7 +1,7 @@
 import { Image, TouchableOpacity, View } from "enmity/components";
 import { React, Toasts } from "enmity/metro/common";
 
-export const Badge = ({ name, image }: { name: string, image: string }) => {
+export const Badge = ({ name, image, size, margin }: { name: string, image: string, size: number, margin: number }) => {
     const styles = {
         wrapper: {
             alignItems: "center",
@@ -9,10 +9,10 @@ export const Badge = ({ name, image }: { name: string, image: string }) => {
             justifyContent: "flex-end"
         },
         image: {
-            width: 24,
-            height: 24,
+            width: size,
+            height: size,
             resizeMode: "contain",
-            marginHorizontal: 2
+            marginHorizontal: margin
         }
     };
 

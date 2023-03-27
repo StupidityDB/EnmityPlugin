@@ -67,15 +67,22 @@ const ReviewDB: Plugin = {
 
     // patches badges and adds enmity reviewdb devs and all the reviewdb badges
     for (const profileBadge of ProfileBadges) {
-      Patcher.after(profileBadge, "default", (_, [{ user: { id } }], res) => {
-
+      Patcher.after(profileBadge, "default", (_, [{ user: { id }, style }], res) => {
         const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
           if (ensure) {
-            const RenderableBadge = () => <Badge
-              name={name}
-              image={image}
+            const RenderableBadge = () => <Badge 
+              name={name} 
+              image={image} 
+              size={Array.isArray(style) 
+                ? style.find(r => r.paddingVertical && r.paddingHorizontal)
+                  ? 16
+                  : 22
+                : 16}
+              margin={Array.isArray(style)
+                ? 2
+                : 6}
             />;
-
+            
             if (res.props.badges) res.props.badges.push(<RenderableBadge />);
             else res.props.children.push(<RenderableBadge />);
           };
@@ -84,8 +91,8 @@ const ReviewDB: Plugin = {
         badges.forEach(badgeObject => {
           pushBadge({
             ensure: badgeObject.discordID === id,
-            name: badgeObject.name,
-            image: badgeObject.icon
+            name: badgeObject?.name,
+            image: badgeObject?.icon
           });
         });
 
