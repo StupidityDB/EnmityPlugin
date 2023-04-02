@@ -1,19 +1,19 @@
 import { version } from 'enmity/api/native';
 import { get, set } from 'enmity/api/settings';
 import { FormDivider, FormInput, FormRow, ScrollView, Text, View } from 'enmity/components';
-import { getByProps } from 'enmity/metro';
-import { React } from 'enmity/metro/common';
+import { getByName, getByProps } from 'enmity/metro';
+import { Navigation, React } from 'enmity/metro/common';
 import { Icons, Updater } from '../../common';
-import { showOAuth2Modal } from '../../common/RDBAPI';
 import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../def';
 import Credits from '../Dependent/Credits';
 import SectionWrapper from '../Wrappers/SectionWrapper';
+import { OAuth2Modal } from '../../common/RDBAPI';
 
 const Router = getByProps("openURL", "transitionToGuild");
 const optionalMargin = parseInt(version.split(".")[0]) > 163 ? 15 : 0;
 
-export default ({ manifest }: SettingsProps) => {
+export default ({ manifest, renderPage }: SettingsProps) => {
   return <ScrollView>
     <Credits manifest={manifest} />
     <SectionWrapper label="Authentication">
@@ -26,7 +26,10 @@ export default ({ manifest }: SettingsProps) => {
           trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }} />}
           // @ts-ignore
           leading={<FormRow.Icon source={Icons.Self} />}
-          onPress={() => showOAuth2Modal()}
+          onPress={() => renderPage(null, {
+            pageName: "",
+            pagePanel: OAuth2Modal
+          })}
         />
         <FormDivider />
         <FormInput

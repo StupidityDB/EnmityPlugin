@@ -1,6 +1,6 @@
 {
   "name": "ReviewDB",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "Review other users. These reviews are visible to anyone with this type of plugin on any platform.",
   "authors": [
     {
@@ -18,7 +18,7 @@
   ],
   "color": "#ff0069",
   "plugin": {
-    "hash": "c2e6b91b"
+    "hash": "d47726cd"
   },
   "links": {
     "source": "https://github.com/StupidityDB/EnmityPlugin/",

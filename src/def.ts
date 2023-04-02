@@ -88,6 +88,7 @@ export interface ReviewsSectionProps {
 export interface SettingsProps {
     settings: SettingsStore;
     manifest: typeof manifest;
+    renderPage: (navigation: any, { pageName, pagePanel }: { pageName: string, pagePanel: any }) => any;
 };
 
 export interface SectionWrapperProps {

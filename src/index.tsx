@@ -1,7 +1,7 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { React, Toasts, Users } from "enmity/metro/common";
+import { Navigation, React, Toasts, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
@@ -10,6 +10,8 @@ import { Badge as BadgeType, PossibleBadgeProps, User } from "./def";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import Settings from "./components/Settings/Settings";
+import Page from "./components/Dependent/Page";
+import { showOAuth2Modal } from "./common/RDBAPI";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
@@ -30,7 +32,11 @@ const ensureCurrentUserInitialized = () => {
   }, 25);
 }
 
-const ReviewDB: Plugin = {
+type ReviewDBPlugin = {
+  renderPage: (navigation: any, { pageName, pagePanel }: { pageName: string, pagePanel: any }) => any;
+} & Plugin
+
+const ReviewDB: ReviewDBPlugin = {
   ...manifest,
 
   async onStart() {
@@ -123,11 +129,20 @@ const ReviewDB: Plugin = {
       profileCardSection?.push(<Reviews userID={userId} currentUserID={currentUserID as string} admins={admins} />);
     });
   },
+
   onStop() {
     Patcher.unpatchAll();
   },
+
+  renderPage(_, { pageName = "", pagePanel }) {
+    return showOAuth2Modal({
+      pageName,
+      pagePanel
+    })
+  },
+
   getSettingsPanel({ settings }): any {
-    return <Settings manifest={manifest} settings={settings} />;
+    return <Settings manifest={manifest} settings={settings} renderPage={this.renderPage} />;
   },
 };
 
