@@ -39,6 +39,13 @@ type ReviewDBPlugin = {
 const ReviewDB: ReviewDBPlugin = {
   ...manifest,
 
+  renderPage(_, { pageName, pagePanel }) {
+    return showOAuth2Modal({
+      pageName,
+      pagePanel
+    })
+  },
+
   async onStart() {
     ensureCurrentUserInitialized();
 
@@ -134,15 +141,8 @@ const ReviewDB: ReviewDBPlugin = {
     Patcher.unpatchAll();
   },
 
-  renderPage(_, { pageName = "", pagePanel }) {
-    return showOAuth2Modal({
-      pageName,
-      pagePanel
-    })
-  },
-
   getSettingsPanel({ settings }): any {
-    return <Settings manifest={manifest} settings={settings} renderPage={this.renderPage} />;
+    return <Settings manifest={manifest} settings={settings} renderPage={ReviewDB.renderPage} />;
   },
 };
 
