@@ -94,8 +94,7 @@ const ReviewDB: ReviewDBPlugin = {
                 ? 4
                 : 8}
             />;
-  
-            console.log("Pushing badges!!!", { name, image, ensure })
+
             if (res.props.badges) res.props.badges.push(<RenderableBadge />);
             else res.props.children.push(<RenderableBadge />);
           };
