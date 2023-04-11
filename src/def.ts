@@ -51,7 +51,7 @@ export interface ShowAlert {
 
 export interface PossibleBadgeProps {
     name: string;
-    image: string;
+    image?: string;
     ensure: boolean;
 }
 

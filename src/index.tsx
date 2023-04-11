@@ -1,7 +1,7 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { Navigation, React, Toasts, Users } from "enmity/metro/common";
+import { React, Toasts, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
@@ -9,13 +9,12 @@ import { Icons } from "./common";
 import { Badge as BadgeType, PossibleBadgeProps, User } from "./def";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
-import Settings from "./components/Settings/Settings";
-import Page from "./components/Dependent/Page";
 import { showOAuth2Modal } from "./common/RDBAPI";
+import Settings from "./components/Settings/Settings";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
-const ProfileBadges = getByName("ProfileBadges", { all: true, default: false });
+const ProfileBadges = getByProps("ProfileBadgesOld");
 
 let currentUserID = get(manifest.name, "currentUser", undefined) as string | undefined;
 let currentUserAttempts = 0;
@@ -77,10 +76,10 @@ const ReviewDB: ReviewDBPlugin = {
         set(manifest.name, "lastReviewID", res["lastReviewID"]);
       };
     };
-
+ 
     // patches badges and adds enmity reviewdb devs and all the reviewdb badges
-    for (const profileBadge of ProfileBadges) {
-      Patcher.after(profileBadge, "default", (_, [{ user: { id }, style }], res) => {
+    Patcher.after(ProfileBadges, "default", (_, __, res) => {
+      Patcher.after(res, "type",  (_, [{ user: { id }, style }], res) => {
         const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
           if (ensure) {
             const RenderableBadge = () => <Badge 
@@ -92,15 +91,16 @@ const ReviewDB: ReviewDBPlugin = {
                   : 22
                 : 16}
               margin={Array.isArray(style)
-                ? 2
-                : 6}
+                ? 4
+                : 8}
             />;
-            
+  
+            console.log("Pushing badges!!!", { name, image, ensure })
             if (res.props.badges) res.props.badges.push(<RenderableBadge />);
             else res.props.children.push(<RenderableBadge />);
           };
         };
-
+  
         badges.forEach(badgeObject => {
           pushBadge({
             ensure: badgeObject.discordID === id,
@@ -108,15 +108,15 @@ const ReviewDB: ReviewDBPlugin = {
             image: badgeObject?.icon
           });
         });
-
+  
         const possibleAuthor = manifest.authors.find(author => author.id === id);
         pushBadge({
           ensure: Boolean(possibleAuthor),
           name: "Enmity ReviewDB Developer",
-          image: possibleAuthor!.icon
+          image: possibleAuthor?.icon
         });
-      });
-    };
+      })
+    });
 
     // patches profile section to add reviews section to the bottom
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
