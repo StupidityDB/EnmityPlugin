@@ -11,10 +11,12 @@ import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
 import { showOAuth2Modal } from "./common/RDBAPI";
 import Settings from "./components/Settings/Settings";
+import { build } from "enmity/api/native";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
-const ProfileBadges = getByProps("ProfileBadgesOld");
+const OldBadges = getByName('ProfileBadges', { all: true, default: false });
+const NewBadges = getByProps("ProfileBadgesOld");
 
 let currentUserID = get(manifest.name, "currentUser", undefined) as string | undefined;
 let currentUserAttempts = 0;
@@ -77,45 +79,58 @@ const ReviewDB: ReviewDBPlugin = {
       };
     };
  
-    // patches badges and adds enmity reviewdb devs and all the reviewdb badges
-    Patcher.after(ProfileBadges, "default", (_, __, res) => {
-      Patcher.after(res, "type",  (_, [{ user: { id }, style }], res) => {
-        const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
-          if (ensure) {
-            const RenderableBadge = () => <Badge 
-              name={name} 
-              image={image} 
-              size={Array.isArray(style) 
-                ? style.find(r => r.paddingVertical && r.paddingHorizontal)
-                  ? 16
-                  : 22
-                : 16}
-              margin={Array.isArray(style)
-                ? 4
-                : 8}
-            />;
+    const patchBadges = ({ id, style, res}) => {
+      const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
+        if (ensure) {
+          const RenderableBadge = () => <Badge 
+            name={name} 
+            image={image} 
+            size={Array.isArray(style) 
+              ? style.find(r => r.paddingVertical && r.paddingHorizontal)
+                ? 16
+                : 22
+              : 16}
+            margin={Array.isArray(style)
+              ? 4
+              : 8}
+          />;
 
-            if (res.props.badges) res.props.badges.push(<RenderableBadge />);
-            else res.props.children.push(<RenderableBadge />);
-          };
+          if (res.props.badges) res.props.badges.push(<RenderableBadge />);
+          else res.props.children.push(<RenderableBadge />);
         };
-  
-        badges.forEach(badgeObject => {
-          pushBadge({
-            ensure: badgeObject.discordID === id,
-            name: badgeObject?.name,
-            image: badgeObject?.icon
-          });
-        });
-  
-        const possibleAuthor = manifest.authors.find(author => author.id === id);
+      };
+
+      badges.forEach(badgeObject => {
         pushBadge({
-          ensure: Boolean(possibleAuthor),
-          name: "Enmity ReviewDB Developer",
-          image: possibleAuthor?.icon
+          ensure: badgeObject.discordID === id,
+          name: badgeObject?.name,
+          image: badgeObject?.icon
         });
+      });
+
+      const possibleAuthor = manifest.authors.find(author => author.id === id);
+      pushBadge({
+        ensure: Boolean(possibleAuthor),
+        name: "Enmity ReviewDB Developer",
+        image: possibleAuthor?.icon
+      });
+    }
+
+    if (build >= "42235") {
+      Patcher.after(NewBadges, 'default', (_, [{ user: { id }, style }], res) => {
+        patchBadges({ id, style, res })
+      });
+  
+      return Patcher.unpatchAll;
+    }
+  
+    for (const ProfileBadges of OldBadges) {
+      Patcher.after(ProfileBadges, "default", (_, [{ user: { id }, isEnmity, style, ...rest }], res) => {
+        patchBadges({ id, style, res })
       })
-    });
+    };
+  
+    return Patcher.unpatchAll;
 
     // patches profile section to add reviews section to the bottom
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
