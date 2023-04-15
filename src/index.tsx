@@ -78,14 +78,14 @@ const ReviewDB: ReviewDBPlugin = {
         set(manifest.name, "lastReviewID", res["lastReviewID"]);
       };
     };
- 
+
     const patchBadges = ({ id, style, res}) => {
       const pushBadge = ({ name, image, ensure }: PossibleBadgeProps) => {
         if (ensure) {
-          const RenderableBadge = () => <Badge 
-            name={name} 
-            image={image} 
-            size={Array.isArray(style) 
+          const RenderableBadge = () => <Badge
+            name={name}
+            image={image}
+            size={Array.isArray(style)
               ? style.find(r => r.paddingVertical && r.paddingHorizontal)
                 ? 16
                 : 22
@@ -120,17 +120,17 @@ const ReviewDB: ReviewDBPlugin = {
       Patcher.after(NewBadges, 'default', (_, [{ user: { id }, style }], res) => {
         patchBadges({ id, style, res })
       });
-  
-      return Patcher.unpatchAll;
+
+      // return Patcher.unpatchAll;
+    } else {
+      for (const ProfileBadges of OldBadges) {
+        Patcher.after(ProfileBadges, "default", (_, [{ user: { id }, isEnmity, style, ...rest }], res) => {
+          patchBadges({ id, style, res })
+        })
+      };
     }
-  
-    for (const ProfileBadges of OldBadges) {
-      Patcher.after(ProfileBadges, "default", (_, [{ user: { id }, isEnmity, style, ...rest }], res) => {
-        patchBadges({ id, style, res })
-      })
-    };
-  
-    return Patcher.unpatchAll;
+
+    // return Patcher.unpatchAll;
 
     // patches profile section to add reviews section to the bottom
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
