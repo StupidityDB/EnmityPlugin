@@ -1,6 +1,6 @@
 import { get } from "enmity/api/settings";
 import { Text, View } from 'enmity/components';
-import { getByProps } from "enmity/metro";
+import { getByName, getByProps } from "enmity/metro";
 import { React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
 import { Icons } from "../../common";
@@ -13,11 +13,43 @@ import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
-const ConditionalSwappable = ({ condition, north, south }: ConditionalSwappableProps) => {
-  return <>
-    {condition ? south : north}
-    {condition ? north : south}
-  </>
+const UserProfileSection = getByName("UserProfileSection")
+const ReviewButton = ({ existingReview, userID }) => {
+  return <Button
+    text={`${existingReview ? "Update" : "Create"} Review`}
+    image={existingReview ? "ic_edit_24px" : "img_nitro_star"}
+    onPress={() => {
+      // this does not need to be a seperate function as its only used once, but it is cleaner this way.
+      // as this is now an alert which closes the profile, state is not required for this as the profile must be reopened, rendering the reviews anyways
+      // hence, setting the new reviews is not required either. the only thing required is to set the input to "" to clear its content from beforehand.
+      showAlert({
+        title: `${existingReview ? "Update" : "Create"} Review`,
+        confirmText: existingReview ? "Update" : "Create",
+        placeholder: `Tap here to ${existingReview ? "update your existing review" : "create a new review"}...`,
+        onConfirm: (input: string, setInput: Function) => {
+          if (input) {
+            addReview({
+              "comment": input.trim(),
+              "token": get(manifest.name, "rdbToken", "")
+            }, userID).then(() => setInput(""));
+          } else {
+            Toasts.open({
+              content: "Please enter a review before submitting.",
+              source: Icons.Failed,
+            });
+          }
+        },
+        userID,
+        existing: existingReview ? existingReview?.comment as string : undefined,
+      });
+    }}
+    style={{
+      paddingLeft: 9,
+      paddingRight: 9,
+      paddingTop: 6,
+      paddingBottom: 6
+    }}
+  />
 }
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
@@ -32,70 +64,27 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     });
   }, [])
 
-  return <>
+  return <UserProfileSection showContainer title="Reviews" style={{ marginBottom: 16 }}>
+    {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
     <View style={styles.container}>
-      <Text style={styles.eyebrow}>
-        User Reviews
-      </Text>
+      {reviews && reviews.length > 0
+        ? reviews.map((review: ReviewType) => <Review
+            review={review}
+            onSubmit={() => renderActionSheet(ReviewActionSheet, {
+                onConfirm: () => LazyActionSheet?.hideActionSheet(),
+                review, currentUserID, admins
+              })
+            }
+          />)
+        : <Text style={[
+          styles.text,
+          styles.safeText,
+          styles.content,
+          { alignSelf: "center" }
+        ]}>
+          No reviews yet. You could be the first!
+        </Text>}
     </View>
-    <View style={styles.reviewWindow}>
-      <ConditionalSwappable
-        condition={Boolean(reviews && reviews.length > 5)}
-        north={<View style={styles.container}>
-          {reviews && reviews.length > 0
-            ? reviews.map((review: ReviewType) => <Review
-                review={review}
-                onSubmit={() => renderActionSheet(ReviewActionSheet, {
-                    onConfirm: () => LazyActionSheet?.hideActionSheet(),
-                    review, currentUserID, admins
-                  })
-                }
-              />)
-            : <Text style={[
-              styles.text,
-              styles.safeText,
-              styles.content,
-              { alignSelf: "center" }
-            ]}>
-              No reviews yet. You could be the first!
-            </Text>}
-        </View>}
-        south={<Button
-          text={`${existingReview ? "Update" : "Create"} Review`}
-          image={existingReview ? "ic_edit_24px" : "img_nitro_star"}
-          onPress={() => {
-            // this does not need to be a seperate function as its only used once, but it is cleaner this way.
-            // as this is now an alert which closes the profile, state is not required for this as the profile must be reopened, rendering the reviews anyways
-            // hence, setting the new reviews is not required either. the only thing required is to set the input to "" to clear its content from beforehand.
-            showAlert({
-              title: `${existingReview ? "Update" : "Create"} Review`,
-              confirmText: existingReview ? "Update" : "Create",
-              placeholder: `Tap here to ${existingReview ? "update your existing review" : "create a new review"}...`,
-              onConfirm: (input: string, setInput: Function) => {
-                if (input) {
-                  addReview({
-                    "comment": input.trim(),
-                    "token": get(manifest.name, "rdbToken", "")
-                  }, userID).then(() => setInput(""));
-                } else {
-                  Toasts.open({
-                    content: "Please enter a review before submitting.",
-                    source: Icons.Failed,
-                  });
-                }
-              },
-              userID,
-              existing: existingReview ? existingReview?.comment as string : undefined,
-            });
-          }}
-          style={{
-            paddingLeft: 9,
-            paddingRight: 9,
-            paddingTop: 6,
-            paddingBottom: 6
-          }}
-        />}
-      />
-    </View>
-  </>
+    <ReviewButton existingReview={existingReview} userID={userID} />
+  </UserProfileSection>
 }

@@ -23,12 +23,6 @@ const styles = StyleSheet.createThemedStyleSheet({
     marginBottom: 8,
     width: "98%"
   },
-  reviewWindow: {
-    margin: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "rgba(75, 75, 75, 0.7)",
-  },
   systemContainer: {
     marginLeft: 4,
     backgroundColor: Constants.ThemeColorMap.BACKGROUND_SECONDARY,
@@ -153,13 +147,6 @@ const styles = StyleSheet.createThemedStyleSheet({
     marginLeft: 4,
     marginTop: AUTHOR_SIZE/12
   },
-  eyebrow: {
-    textTransform: 'uppercase',
-    fontSize: 12,
-    lineHeight: 16,
-    fontFamily: Constants.Fonts.PRIMARY_BOLD,
-    color: Constants.ThemeColorMap.TEXT_NORMAL,
-  },
 
   // styles for author part of review
   authorName: {
@@ -183,7 +170,7 @@ const styles = StyleSheet.createThemedStyleSheet({
   },
 
   // styles for badge
-  rdbBadge: {
+  badge: {
     width: AUTHOR_SIZE * 0.85,
     height: AUTHOR_SIZE * 0.85,
     marginTop: 1,

@@ -85,7 +85,7 @@ export default ({ review, onSubmit }: ReviewProps) => {
           })}>
             <Image
               loading="lazy"
-              style={styles.rdbBadge}
+              style={styles.badge}
               source={{
                 uri: badge["icon"],
               }}

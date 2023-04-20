@@ -1,7 +1,7 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { React, Toasts, Users } from "enmity/metro/common";
+import { React, Theme, Toasts, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
@@ -12,11 +12,12 @@ import Reviews from "./components/Reviews/Reviews";
 import { showOAuth2Modal } from "./common/RDBAPI";
 import Settings from "./components/Settings/Settings";
 import { build } from "enmity/api/native";
+import { View } from "enmity/components";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
 const OldBadges = getByName('ProfileBadges', { all: true, default: false });
-const NewBadges = getByProps("ProfileBadgesOld");
+const NewBadges = getByName("ProfileBadges", { default: false });
 
 let currentUserID = get(manifest.name, "currentUser", undefined) as string | undefined;
 let currentUserAttempts = 0;
@@ -118,10 +119,28 @@ const ReviewDB: ReviewDBPlugin = {
 
     if (build >= "42235") {
       Patcher.after(NewBadges, 'default', (_, [{ user: { id }, style }], res) => {
-        patchBadges({ id, style, res })
-      });
+        const oldRes = res;
+        if (!res) {
+          res = <View 
+            style={[style, { 
+              flexDirection: "row", 
+              flexWrap: 'wrap', 
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end'
+            }]} 
+            accessibilityRole={"list"}
+            accessibilityLabel={"User Badges"}
+          />;
 
-      // return Patcher.unpatchAll;
+          res.props.children = [];
+        }
+
+        patchBadges({ id, style, res });
+
+        if (!oldRes) {
+          return res;
+        }
+      });
     } else {
       for (const ProfileBadges of OldBadges) {
         Patcher.after(ProfileBadges, "default", (_, [{ user: { id }, isEnmity, style, ...rest }], res) => {
@@ -130,24 +149,22 @@ const ReviewDB: ReviewDBPlugin = {
       };
     }
 
-    // return Patcher.unpatchAll;
-
     // patches profile section to add reviews section to the bottom
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
-      const profileCardSection = findInReactTree(res, r =>
+      const profileCardActionsSection = findInReactTree(res, r =>
         r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")
+        && !r?.props.children.find((e: any) => e.type === getByName("UserProfileName"))
         && r?.type?.displayName === "View"
         && Array?.isArray(r?.props?.style)
       )?.props?.children;
 
-      if (!profileCardSection) return res;
+      if (!profileCardActionsSection) return res;
 
-      const { userId } = profileCardSection?.find((r: any) => typeof r?.props?.displayProfile?.userId === "string")
+      const { userId } = profileCardActionsSection?.find((r: any) => typeof r?.props?.displayProfile?.userId === "string")
         ?.props?.displayProfile ?? {};
 
       if (!userId) return res;
-
-      profileCardSection?.push(<Reviews userID={userId} currentUserID={currentUserID as string} admins={admins} />);
+      profileCardActionsSection?.push(<Reviews userID={userId} currentUserID={currentUserID as string} admins={admins} />);
     });
   },
 
