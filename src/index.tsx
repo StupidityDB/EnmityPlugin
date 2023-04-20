@@ -16,6 +16,7 @@ import { View } from "enmity/components";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
+const UserProfileName = getByName("UserProfileName");
 const OldBadges = getByName('ProfileBadges', { all: true, default: false });
 const NewBadges = getByName("ProfileBadges", { default: false });
 
@@ -154,7 +155,7 @@ const ReviewDB: ReviewDBPlugin = {
     Patcher.after(UserProfile.default, "type", (_, __, res) => {
       const profileCardActionsSection = findInReactTree(res, r =>
         r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")
-        && !r?.props.children.find((e: any) => e.type === getByName("UserProfileName"))
+        && !r?.props.children.find((e: any) => e.type === UserProfileName)
         && r?.type?.displayName === "View"
         && Array?.isArray(r?.props?.style)
       )?.props?.children;
