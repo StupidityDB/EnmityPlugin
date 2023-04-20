@@ -126,7 +126,8 @@ const ReviewDB: ReviewDBPlugin = {
               flexDirection: "row", 
               flexWrap: 'wrap', 
               alignItems: 'flex-end',
-              justifyContent: 'flex-end'
+              justifyContent: 'flex-end',
+              paddingVertical: 2
             }]} 
             accessibilityRole={"list"}
             accessibilityLabel={"User Badges"}

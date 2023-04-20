@@ -13,7 +13,9 @@ import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
-const UserProfileSection = getByName("UserProfileSection")
+const UserProfileSection = getByName("UserProfileSection");
+const { FlatList } = getByProps("FlatList");
+
 const ReviewButton = ({ existingReview, userID }) => {
   return <Button
     text={`${existingReview ? "Update" : "Create"} Review`}
@@ -68,14 +70,18 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
     <View style={styles.container}>
       {reviews && reviews.length > 0
-        ? reviews.map((review: ReviewType) => <Review
-            review={review}
+        ? <FlatList 
+          data={reviews}
+          renderItem={({ item }) => <Review
+            review={item}
             onSubmit={() => renderActionSheet(ReviewActionSheet, {
                 onConfirm: () => LazyActionSheet?.hideActionSheet(),
-                review, currentUserID, admins
+                item, currentUserID, admins
               })
             }
-          />)
+          />}
+          keyExtractor={(review) => review?.id.toString()}
+        />
         : <Text style={[
           styles.text,
           styles.safeText,
