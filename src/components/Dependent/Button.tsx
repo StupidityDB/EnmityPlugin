@@ -16,7 +16,7 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
     container: {
       width: "98%",
       padding: 1,
-      borderRadius: 8
+      borderRadius: 9
     },
     safeText: {
       color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_NORMAL)
