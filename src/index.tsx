@@ -115,7 +115,7 @@ const ReviewDB: ReviewDBPlugin = {
         ensure: Boolean(possibleAuthor),
         name: "Enmity ReviewDB Developer",
         image: possibleAuthor?.icon
-      });
+      })
     }
 
     if (build >= "42235") {
@@ -124,11 +124,10 @@ const ReviewDB: ReviewDBPlugin = {
         if (!res) {
           res = <View 
             style={[style, { 
-              flexDirection: "row", 
+              flexDirection: 'row', 
               flexWrap: 'wrap', 
               alignItems: 'flex-end',
               justifyContent: 'flex-end',
-              paddingVertical: 2
             }]} 
             accessibilityRole={"list"}
             accessibilityLabel={"User Badges"}

@@ -45,6 +45,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             Toasts.open({ content: "Copied to clipboard!", source: Icons.Success })
             onConfirm()
           }}
+          style={{ marginTop: 8 }}
         />}
         {Boolean(review["id"]) && <Button
           text="Copy ID"
@@ -54,6 +55,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             Toasts.open({ content: "Copied to clipboard!", source: Icons.Success })
             onConfirm()
           }}
+          style={{ marginTop: 8 }}
         />}
         {canDeleteReview(review, currentUserID, admins) && <Button
           text="Delete Review"
@@ -64,6 +66,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
               onConfirm()
             })
           }}
+          style={{ marginTop: 8 }}
         />}
         {Boolean(review["id"]) && <Button
           text="Report Review"
@@ -74,6 +77,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
               onConfirm()
             })
           }}
+          style={{ marginTop: 8 }}
         />}
       </View>
     </BottomSheetScrollView>

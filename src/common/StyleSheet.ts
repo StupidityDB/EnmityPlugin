@@ -12,11 +12,6 @@ const styles = StyleSheet.createThemedStyleSheet({
     alignSelf: 'flex-start',
     width: "95%"
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   reviewContainer: {
     borderRadius: 9,
     padding: 1,
@@ -54,10 +49,7 @@ const styles = StyleSheet.createThemedStyleSheet({
   button: {
     width: '98%',
     height: 40,
-    backgroundColor: Constants.ThemeColorMap.BACKGROUND_SECONDARY_ALT,
     borderRadius: 8,
-    marginTop: 6,
-    marginBottom: 6,
     flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
@@ -191,9 +183,6 @@ const styles = StyleSheet.createThemedStyleSheet({
   },
   dangerousIcon: {
     tintColor: Constants.ThemeColorMap.TEXT_MUTED
-  },
-  safeIcon: {
-    tintColor: Constants.ThemeColorMap.INTERACTIVE_NORMAL
   },
   creditsImage: {
     width: 75,

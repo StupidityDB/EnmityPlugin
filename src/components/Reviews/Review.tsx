@@ -1,19 +1,39 @@
 import { FormRow, Image, Text, TouchableOpacity, View } from "enmity/components";
 import { bulk, filters } from "enmity/metro";
-import { Profiles, React, Toasts, Users } from 'enmity/metro/common';
+import { Constants, Profiles, React, Toasts, Users } from 'enmity/metro/common';
 import { Icons } from '../../common';
 import styles from "../../common/StyleSheet";
 import { ReviewProps } from "../../def";
 
 const [
   { ProfileGradientCard }, // used to render a card with the external colors being the user's profile theme. requires padding tobe set as a result.
-  ProfileFetcher
+  ProfileFetcher,
+  { useThemeContext },
+  { meta: { resolveSemanticColor } }
 ] = bulk(
   filters.byProps("ProfileGradientCard"),
-  filters.byProps("fetchProfile")
+  filters.byProps("fetchProfile"),
+  filters.byProps("useThemeContext"),
+  filters.byProps("colors", "meta")
 );
 
 export default ({ review, onSubmit }: ReviewProps) => {
+  const themeContext = useThemeContext();
+  const contextStyles = {
+    author: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
+    },
+    timestamp: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
+    },
+    system: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_MUTED)
+    },
+    content: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_NORMAL)
+    }
+  }
+
   const [formattedTime, setFormattedTime] = React.useState<string>();
 
   React.useEffect(() => {
@@ -51,7 +71,7 @@ export default ({ review, onSubmit }: ReviewProps) => {
             }}
           />}
           {Boolean(review["sender"]["username"]) && <View style={{ marginLeft: 6 }}>
-            <Text style={[styles.mainText, styles.authorName]}>
+            <Text style={[styles.mainText, styles.authorName, contextStyles.author]}>
               {review["sender"]["username"]}
             </Text>
           </View>}
@@ -71,7 +91,8 @@ export default ({ review, onSubmit }: ReviewProps) => {
               styles.text,
               styles.mainText,
               styles.dangerousText,
-              styles.systemText
+              styles.systemText,
+              contextStyles.system
             ]}>
               SYSTEM
             </Text>
@@ -91,14 +112,15 @@ export default ({ review, onSubmit }: ReviewProps) => {
               }}
             />
           </TouchableOpacity>)}
-          {Boolean(review["timestamp"]) && <Text style={{
-              ...styles.mainText,
-              ...styles.timestamp
-          }}>
+          {Boolean(review["timestamp"]) && <Text style={[
+              styles.mainText,
+              styles.timestamp,
+              contextStyles.timestamp
+          ]}>
             {formattedTime}
           </Text>}
         </TouchableOpacity>
-        <Text style={styles.messageContent}>
+        <Text style={[styles.messageContent, contextStyles.content]}>
           {review["comment"] ?? "Invalid message content."}
         </Text>
       </View>
