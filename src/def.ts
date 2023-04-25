@@ -61,7 +61,10 @@ export interface ButtonProps {
     image?: string;
     dangerous?: boolean;
     onPress?: Function;
-    style?: { [key: string]: any }
+    style?: Record<string, any>
+    innerStyle?: Record<string, any>
+    textStyle?: Record<string, any>
+    useGradient?: boolean
 }
 
 export interface CreditsProps {

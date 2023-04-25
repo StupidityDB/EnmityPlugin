@@ -1,5 +1,5 @@
 import { get } from "enmity/api/settings";
-import { Text, View } from 'enmity/components';
+import { Text, TouchableOpacity, View } from 'enmity/components';
 import { getByName, getByProps } from "enmity/metro";
 import { Profiles, React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
@@ -11,6 +11,7 @@ import showAlert from "../Dependent/Alert";
 import Button from "../Dependent/Button";
 import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
+import { getIDByName } from "enmity/api/assets";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 const UserProfileSection = getByName("UserProfileSection");
@@ -48,6 +49,8 @@ const ReviewButton = ({ existingReview, userID }) => {
         });
       }}
       style={{ marginBottom: 10 }}
+      textStyle={{ fontSize: 16 }}
+      useGradient
     />
   </View>
 }
@@ -59,13 +62,34 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
   const existingReview = reviews?.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID);
 
   React.useEffect(() => {
-    getReviews(userID).then((reviews: ReviewType[] | undefined) => {
-      reviews && setReviews(reviews)
-    });
+    getReviews(userID).then((reviews: ReviewType[] | undefined) => { reviews && setReviews(reviews) });
   }, [])
 
   return <UserProfileSection showContainer title="Reviews" style={{ marginBottom: 16 }}>
     {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
+    <Button 
+      text={"Refresh Reviews"} 
+      image={"img_nitro_star"} 
+      onPress={() => {
+        setReviews([]);
+        getReviews(userID).then((reviews: ReviewType[] | undefined) => { 
+          reviews && setReviews(reviews) 
+          Toasts.open({ content: "Refreshed reviews!", source: Icons.Success })
+        })
+      }} 
+      style={{
+        marginVertical: 0
+      }}
+      innerStyle={{
+        height: "auto",
+        paddingBottom: 12,
+        marginTop: -4
+      }}
+      textStyle={{
+        fontSize: 12
+      }}
+      dangerous
+    />
     <View style={styles.container}>
       {reviews && reviews.length > 0
         ? <FlatList 

@@ -74,7 +74,7 @@ const styles = StyleSheet.createThemedStyleSheet({
     fontFamily: Constants.Fonts.DISPLAY_BOLD
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     marginLeft: 4
   },
   mainText: {
