@@ -42,7 +42,7 @@ const ReviewButton = ({ existingReview, userID }) => {
               });
             }
           },
-          onAny: (userId: string) => Profiles.showUserProfile({ userId }),
+          onAny: (userId: string) => setTimeout(() => Profiles.showUserProfile({ userId })),
           userID,
           existing: existingReview ? existingReview?.comment as string : undefined,
         });
