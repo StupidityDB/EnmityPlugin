@@ -1,12 +1,12 @@
 import { get } from "enmity/api/settings";
 import { Text, View } from 'enmity/components';
 import { getByName, getByProps } from "enmity/metro";
-import { React, Toasts, Users } from "enmity/metro/common";
+import { Profiles, React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
 import { Icons } from "../../common";
 import { addReview, getReviews } from '../../common/RDBAPI';
 import styles from "../../common/StyleSheet";
-import { Review as ReviewType, ReviewsSectionProps, ConditionalSwappableProps } from '../../def';
+import { Review as ReviewType, ReviewsSectionProps } from '../../def';
 import showAlert from "../Dependent/Alert";
 import Button from "../Dependent/Button";
 import Review from "./Review";
@@ -42,6 +42,7 @@ const ReviewButton = ({ existingReview, userID }) => {
               });
             }
           },
+          onAny: (userId: string) => Profiles.showUserProfile({ userId }),
           userID,
           existing: existingReview ? existingReview?.comment as string : undefined,
         });

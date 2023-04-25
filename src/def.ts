@@ -45,6 +45,7 @@ export interface ShowAlert {
     userID: string;
     confirmText?: string;
     onConfirm: Function;
+    onAny?: Function;
     existing?: string;
     placeholder?: string;
 }
@@ -95,10 +96,4 @@ export interface SectionWrapperProps {
     label: string;
     children?: any;
     style?: { [key: string]: any };
-}
-
-export interface ConditionalSwappableProps {
-    condition: boolean;
-    north: React.ReactElement
-    south: React.ReactElement
 }

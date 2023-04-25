@@ -5,7 +5,7 @@ import manifest from "../../../manifest.json";
 import styles from "../../common/StyleSheet";
 import { ShowAlert } from '../../def';
 
-export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, existing, placeholder }: ShowAlert) => {
+export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, onAny, existing, placeholder }: ShowAlert) => {
   const User = Users.getUser(userID);
 
   // dialogs can take `children` or `body` but not both.
@@ -48,12 +48,16 @@ export const showAlert = ({ title, userID, confirmText = "Confirm", onConfirm, e
 
     // calls onConfim with the current input value, and a callback that sets the value to whatever is defined later
     // so at call-time, you can use "(value, setValue) => {}" and use them accordingly
-    onConfirm: () => onConfirm(
-      get(manifest.name, "inputValue", ""),
-      (input: string) => set(manifest.name, "inputValue", input)
-    ),
+    onConfirm: () => {
+      onConfirm(
+        get(manifest.name, "inputValue", ""),
+        (input: string) => set(manifest.name, "inputValue", input),
+      ),
+      onAny?.(userID);
+    },
     onCancel: () => {
-      set(manifest.name, "inputValue", "")
+      set(manifest.name, "inputValue", "");
+      onAny?.(userID);
     }
   })
 }
