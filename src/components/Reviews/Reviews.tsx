@@ -66,7 +66,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
   }, [])
 
   return <UserProfileSection showContainer title="Reviews" style={{ marginBottom: 16 }}>
-    {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
+    <ReviewButton existingReview={existingReview} userID={userID} />
     <Button 
       text={"Refresh Reviews"} 
       image={"img_nitro_star"} 
@@ -113,6 +113,6 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
           No reviews yet. You could be the first!
         </Text>}
     </View>
-    <ReviewButton existingReview={existingReview} userID={userID} />
+    {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
   </UserProfileSection>
 }
