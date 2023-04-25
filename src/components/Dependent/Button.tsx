@@ -32,27 +32,25 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
     }
   }
 
-  return (
+  return <ProfileGradientCard style={[contextStyles.container, style]} fallbackBackground={styles.fallback.color}>
     <TouchableOpacity
       style={styles.button}
       onPress={onPress ?? console.log("No press function provided.")}
     >
-      <ProfileGradientCard style={[contextStyles.container, style]} fallbackBackground={styles.fallback.color}>
-        {/* @ts-ignore ~ cannot assign actual props to intrinsic attributes, i can confirm this works */}
-        <FormRow.Icon source={getIDByName(image)} style={[
-          styles.icon,
-          dangerous
-            ? contextStyles.dangerousIcon
-            : contextStyles.safeIcon
-        ]} />
-        <Text style={[
-          styles.text,
-          dangerous
-            ? contextStyles.dangerousText
-            : contextStyles.safeText,
-          styles.buttonText
-        ]}>{text}</Text>
-      </ProfileGradientCard>
+      {/* @ts-ignore ~ cannot assign actual props to intrinsic attributes, i can confirm this works */}
+      <FormRow.Icon source={getIDByName(image)} style={[
+        styles.icon,
+        dangerous
+          ? contextStyles.dangerousIcon
+          : contextStyles.safeIcon
+      ]} />
+      <Text style={[
+        styles.text,
+        dangerous
+          ? contextStyles.dangerousText
+          : contextStyles.safeText,
+        styles.buttonText
+      ]}>{text}</Text>
     </TouchableOpacity>
-  )
+  </ProfileGradientCard>
 };
