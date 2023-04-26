@@ -69,7 +69,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     <ReviewButton existingReview={existingReview} userID={userID} />
     <Button 
       text={"Refresh Reviews"} 
-      image={"img_nitro_star"} 
+      image={"ic_message_retry"} 
       onPress={() => {
         setReviews([]);
         getReviews(userID).then((reviews: ReviewType[] | undefined) => { 

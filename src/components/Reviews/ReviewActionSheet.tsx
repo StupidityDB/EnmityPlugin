@@ -46,6 +46,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             onConfirm()
           }}
           style={{ marginTop: 8 }}
+          useGradient
         />}
         {Boolean(review["id"]) && <Button
           text="Copy ID"
@@ -56,6 +57,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             onConfirm()
           }}
           style={{ marginTop: 8 }}
+          useGradient
         />}
         {canDeleteReview(review, currentUserID, admins) && <Button
           text="Delete Review"
@@ -67,6 +69,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             })
           }}
           style={{ marginTop: 8 }}
+          useGradient
         />}
         {Boolean(review["id"]) && <Button
           text="Report Review"
@@ -78,6 +81,7 @@ export default function ReviewActionSheet({ onConfirm, review, currentUserID, ad
             })
           }}
           style={{ marginTop: 8 }}
+          useGradient
         />}
       </View>
     </BottomSheetScrollView>
