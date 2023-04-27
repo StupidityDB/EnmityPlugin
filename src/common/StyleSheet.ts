@@ -71,11 +71,8 @@ const styles = StyleSheet.createThemedStyleSheet({
 
   // styles for various texts
   text: {
+    fontSize: 16,
     fontFamily: Constants.Fonts.DISPLAY_BOLD
-  },
-  buttonText: {
-    fontSize: 18,
-    marginLeft: 4
   },
   mainText: {
     opacity: 0.975,

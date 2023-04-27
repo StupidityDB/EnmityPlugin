@@ -73,7 +73,9 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
   />
 
   return useGradient 
-      ? <ProfileGradientCard style={[contextStyles.container, style]} fallbackBackground={styles.fallback.color}>
+      ? <ProfileGradientCard 
+        style={[contextStyles.container, style]} 
+        fallbackBackground={styles.fallback.color}>
         <RenderableButton />  
       </ProfileGradientCard> 
       :  <RenderableButton />  
