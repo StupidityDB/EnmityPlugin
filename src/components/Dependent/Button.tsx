@@ -8,6 +8,7 @@ import { getByProps } from 'enmity/metro';
 const { useThemeContext } = getByProps("useThemeContext");
 const { meta: { resolveSemanticColor } } = getByProps("colors", "meta");
 const { ProfileGradientCard } = getByProps("ProfileGradientCard");
+const { triggerHaptic } = getByProps("triggerHaptic");
 
 const _Button = ({ onPress, innerStyle, textStyle, dangerous, contextStyles, text, image }: ButtonProps & { contextStyles: Record<string, any> }) => {
   return <TouchableOpacity
@@ -59,7 +60,10 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
   }
 
   const RenderableButton = () => <_Button 
-    onPress={onPress} 
+    onPress={() => {
+      onPress?.();
+      triggerHaptic();
+    }} 
     innerStyle={innerStyle}
     textStyle={textStyle}
     dangerous={dangerous} 
