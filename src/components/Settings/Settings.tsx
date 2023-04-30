@@ -43,7 +43,7 @@ export default ({ manifest }: SettingsProps) => {
       <View style={styles.formrowContainer}>
         <FormRow
           label='Show warning'
-          leading={<FormRow.Icon style={styles.icon} source={Icons.Warning} />}
+          leading={<FormRow.Icon source={Icons.Warning} />}
           subLabel={`Display warning to be respectful to other users at the top of the review list`}
           onLongPress={() => Miscellaneous.displayToast('Shows a warning at the top of the reviews list reminding you to be respectful to other users.', 'tooltip')}
           trailing={() => <FormSwitch
