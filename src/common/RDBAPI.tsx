@@ -83,9 +83,9 @@ export const showOAuth2Modal = ({ pageName, pagePanel }) =>
     })
 
 
-export async function getReviews(userID: string) {
+export async function getReviews(userID: string, offset: number) {
   try {
-    const res = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews`, {
+    const res = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews?offset=${offset}`, {
       method: "GET",
     });
 

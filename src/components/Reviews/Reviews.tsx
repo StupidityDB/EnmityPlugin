@@ -1,5 +1,5 @@
 import { get } from "enmity/api/settings";
-import { Text, TouchableOpacity, View } from 'enmity/components';
+import { FormInput, Text, TouchableOpacity, View } from 'enmity/components';
 import { getByName, getByProps } from "enmity/metro";
 import { Profiles, React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
@@ -11,11 +11,11 @@ import showAlert from "../Dependent/Alert";
 import Button from "../Dependent/Button";
 import Review from "./Review";
 import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
-import { getIDByName } from "enmity/api/assets";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 const UserProfileSection = getByName("UserProfileSection");
 const { FlatList } = getByProps("FlatList");
+const OFFSET = 50;
 
 const ReviewButton = ({ existingReview, userID }) => {
   return <View style={styles.container}>
@@ -56,14 +56,37 @@ const ReviewButton = ({ existingReview, userID }) => {
 }
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
-  const [reviews, setReviews] = React.useState<Array<ReviewType>>();
-
-  // this will update whenever this component is rerendered (as its not state or in a useEffect), aka when the reviews are set. therefore, this *should* display the correct info.
-  const existingReview = reviews?.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID);
-
+  const [page, setPage] = React.useState<number>(0);
+  const [reviews, setReviews] = React.useState<Array<ReviewType>>([]);
+  const [existingReview, setExistingReview] = React.useState<any>(null);
+  let pageRenders = 0;
+  
   React.useEffect(() => {
-    getReviews(userID).then((reviews: ReviewType[] | undefined) => { reviews && setReviews(reviews) });
-  }, [])
+    let shouldKill = false;
+
+    pageRenders++;
+    let currentRenders = pageRenders;
+
+    setTimeout(() => {
+      if (pageRenders === currentRenders) {
+        getReviews(userID, page * OFFSET).then((fetchedReviews: ReviewType[] | undefined ) => {
+          if (fetchedReviews) {
+            if (shouldKill) return;
+            if (fetchedReviews.length <= 0 && page !== 0) {
+              Toasts.open({ content: "Exceeded maximum pages! Returning to 1.", source: Icons.Warning });
+              return setPage(0);
+            };
+    
+            setReviews(fetchedReviews);
+            !existingReview && setExistingReview(fetchedReviews?.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
+            pageRenders = 0;
+          }
+        })
+      }
+    }, 600);
+    
+    return () => (shouldKill = true) && void 0;
+  }, [page]);
 
   return <UserProfileSection showContainer title="Reviews" style={{ marginBottom: 16 }}>
     <ReviewButton existingReview={existingReview} userID={userID} />
@@ -72,10 +95,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       image={"ic_message_retry"} 
       onPress={() => {
         setReviews([]);
-        getReviews(userID).then((reviews: ReviewType[] | undefined) => { 
-          reviews && setReviews(reviews) 
-          Toasts.open({ content: "Refreshed reviews!", source: Icons.Success })
-        })
+        setPage(previous => previous);
       }} 
       style={{
         marginVertical: 0
@@ -90,6 +110,35 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       }}
       dangerous
     />
+    <View style={{ flexDirection: "row", marginHorizontal: 12 }}>
+      <Button 
+        text={"Back"} 
+        image="ic_arrow_back_24px" 
+        onPress={() => setPage(prevPage => prevPage > 0 ? prevPage - 1 : prevPage)} 
+        style={{ flex: 0.3 }}
+        useGradient
+        textDirection={"right"}
+        disabled={page <= 0}
+        textStyle={{ fontSize: 16, marginRight: 4 }}
+      />
+      <Button 
+        text={`Page ${page + 1}`}
+        onPress={() => Toasts.open({ content: `Current Page: ${page + 1}`, source: Icons.Self })}
+        style={{ flex: 0.4, marginLeft: 12 }}
+        useGradient
+        useImage={false}
+      />
+      <Button 
+        text={"Next"} 
+        image="ic_arrow_forward_24px" 
+        onPress={() => setPage(prevPage => reviews.length >= OFFSET ? prevPage + 1 : prevPage)} 
+        style={{ flex: 0.3, marginLeft: 12 }}
+        useGradient
+        textDirection={"left"}
+        disabled={reviews.length < OFFSET}
+        textStyle={{ fontSize: 16, marginLeft: 4 }}
+      />
+    </View>
     <View style={styles.container}>
       {reviews && reviews.length > 0
         ? <FlatList 
@@ -102,7 +151,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
               })
             }
           />}
-          keyExtractor={(review) => review?.id.toString()}
+          keyExtractor={(review: ReviewType) => review.id.toString()}
         />
         : <Text style={[
           styles.text,

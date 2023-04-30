@@ -10,33 +10,43 @@ const { meta: { resolveSemanticColor } } = getByProps("colors", "meta");
 const { ProfileGradientCard } = getByProps("ProfileGradientCard");
 const { triggerHaptic } = getByProps("triggerHaptic");
 
-const _Button = ({ onPress, innerStyle, textStyle, dangerous, contextStyles, text, image }: ButtonProps & { contextStyles: Record<string, any> }) => {
-  return <TouchableOpacity
-    style={[styles.button, innerStyle]}
-    onPress={onPress ?? console.log("No press function provided.")}
-  >
-    {/* @ts-ignore ~ cannot assign actual props to intrinsic attributes, i can confirm this works */}
-    <FormRow.Icon source={getIDByName(image)} style={[
-      styles.icon,
-      dangerous
-        ? contextStyles.dangerousIcon
-        : contextStyles.safeIcon,
-      textStyle?.fontSize ? {
-        width: textStyle.fontSize,
-        height: textStyle.fontSize
-      } : {}
-    ]} />
-    <Text style={[
+
+const _Button = ({ onPress, innerStyle, textStyle, dangerous, contextStyles, text, image, disabled, useImage = true, useText = true, textDirection = "right" }: ButtonProps & { contextStyles: Record<string, any> }) => {
+  const RenderableText = useText && text && typeof text === "string" 
+    ? () => <Text style={[
       styles.text,
       dangerous
         ? contextStyles.dangerousText
         : contextStyles.safeText,
       textStyle
     ]}>{text}</Text>
+    : text as React.FunctionComponent;
+
+  return <TouchableOpacity
+    style={[styles.button, innerStyle, disabled ? { opacity: 0.5 } : {}]}
+    onPress={onPress ?? console.log("No press function provided.")}
+    disabled={disabled}
+  >
+    {textDirection === "left" && <RenderableText />}
+    {/* @ts-ignore ~ cannot assign actual props to intrinsic attributes, i can confirm this works */}
+    {useImage && <FormRow.Icon source={getIDByName(image)} style={[
+      styles.icon,
+      dangerous
+        ? contextStyles.dangerousIcon
+        : contextStyles.safeIcon,
+      textStyle?.fontSize ? {
+        width: textStyle.fontSize + 4,
+        height: textStyle.fontSize + 4
+      } : {},
+      textDirection === "right" 
+        ? { marginRight: 4 }
+        : { marginLeft: 4 }
+    ]} />}
+    {textDirection === "right" && <RenderableText />}
 </TouchableOpacity>
 }
 
-export default function Button({ text, image = "ic_new_group", dangerous, onPress, style, innerStyle, textStyle, useGradient }: ButtonProps) {
+export default function Button({ text, image = "ic_new_group", dangerous, onPress, style, innerStyle, textStyle, useGradient, useImage, useText, disabled, textDirection }: ButtonProps) {
   const themeContext = useThemeContext();
 
   const contextStyles = {
@@ -70,6 +80,10 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
     contextStyles={contextStyles} 
     text={text} 
     image={image}
+    disabled={disabled}
+    useImage={useImage}
+    useText={useText}
+    textDirection={textDirection}
   />
 
   return useGradient 

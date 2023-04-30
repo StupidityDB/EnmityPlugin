@@ -57,14 +57,18 @@ export interface PossibleBadgeProps {
 }
 
 export interface ButtonProps {
-    text: string;
+    text?: string | React.FunctionComponent;
     image?: string;
     dangerous?: boolean;
     onPress?: Function;
     style?: Record<string, any>
     innerStyle?: Record<string, any>
     textStyle?: Record<string, any>
-    useGradient?: boolean
+    useGradient?: boolean,
+    useText?: boolean;
+    useImage?: boolean,
+    disabled?: boolean,
+    textDirection?: "left" | "right"
 }
 
 export interface CreditsProps {

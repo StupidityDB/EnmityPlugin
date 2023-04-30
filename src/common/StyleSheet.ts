@@ -170,7 +170,6 @@ const styles = StyleSheet.createThemedStyleSheet({
   icon: {
     width: 16,
     height: 16,
-    marginRight: 4,
     color: Constants.ThemeColorMap.INTERACTIVE_NORMAL,
   },
   systemIcon: {
