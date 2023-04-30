@@ -1,5 +1,5 @@
 import { get } from "enmity/api/settings";
-import { FormInput, Text, TouchableOpacity, View } from 'enmity/components';
+import { Text, View } from 'enmity/components';
 import { getByName, getByProps } from "enmity/metro";
 import { Profiles, React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
@@ -83,7 +83,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
           }
         })
       }
-    }, 600);
+    }, 300);
     
     return () => (shouldKill = true) && void 0;
   }, [page]);
