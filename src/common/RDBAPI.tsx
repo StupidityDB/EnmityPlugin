@@ -1,10 +1,9 @@
 import { get, set } from 'enmity/api/settings';
-import { Dialog, Navigation, Toasts } from 'enmity/metro/common';
+import { Dialog, Navigation, Toasts, React } from 'enmity/metro/common';
 import manifest from "../../manifest.json";
 import { Icons } from './';
 import { Endpoint, Review } from '../def';
 import Page from '../components/Dependent/Page';
-import React from 'react';
 import { getByName } from 'enmity/metro';
 
 const getRdbToken = () => get(manifest.name, "rdbToken", "");

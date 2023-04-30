@@ -1,8 +1,8 @@
 import { version } from 'enmity/api/native';
 import { get, set } from 'enmity/api/settings';
 import { FormDivider, FormInput, FormRow, ScrollView, Text, View } from 'enmity/components';
-import { getByName, getByProps } from 'enmity/metro';
-import { Navigation, React } from 'enmity/metro/common';
+import { getByProps } from 'enmity/metro';
+import { React } from 'enmity/metro/common';
 import { Icons, Updater } from '../../common';
 import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../def';

@@ -1,7 +1,7 @@
 import { get, set } from "enmity/api/settings";
 import { Plugin, registerPlugin } from "enmity/managers/plugins";
 import { getByName, getByProps } from "enmity/metro";
-import { React, Theme, Toasts, Users } from "enmity/metro/common";
+import { React, Toasts, Users } from "enmity/metro/common";
 import { create } from "enmity/patcher";
 import { findInReactTree } from "enmity/utilities";
 import manifest from "../manifest.json";
