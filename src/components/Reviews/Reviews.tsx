@@ -23,29 +23,29 @@ const ReviewButton = ({ existingReview, userID }) => {
       text={`${existingReview ? "Update" : "Create"} Review`}
       image={existingReview ? "ic_edit_24px" : "img_nitro_star"}
       onPress={() => {
-        // this does not need to be a seperate function as its only used once, but it is cleaner this way.
-        // as this is now an alert which closes the profile, state is not required for this as the profile must be reopened, rendering the reviews anyways
-        // hence, setting the new reviews is not required either. the only thing required is to set the input to "" to clear its content from beforehand.
         showAlert({
           title: `${existingReview ? "Update" : "Create"} Review`,
           confirmText: existingReview ? "Update" : "Create",
           placeholder: `Tap here to ${existingReview ? "update your existing review" : "create a new review"}...`,
           onConfirm: (input: string, setInput: Function) => {
             if (input) {
-              addReview({
-                "comment": input.trim(),
-                "token": get(manifest.name, "rdbToken", "")
-              }, userID).then(() => setInput(""));
-            } else {
-              Toasts.open({
-                content: "Please enter a review before submitting.",
-                source: Icons.Failed,
-              });
-            }
+              return addReview(
+                {
+                  "comment": input.trim(),
+                  "token": get(manifest.name, "rdbToken", "")
+                }, 
+                userID
+              ).then(() => setInput(""));
+            } 
+
+            Toasts.open({
+              content: "Please enter a review before submitting.",
+              source: Icons.Failed,
+            });
           },
           onAny: (userId: string) => setTimeout(() => Profiles.showUserProfile({ userId })),
           userID,
-          existing: existingReview ? existingReview?.comment as string : undefined,
+          existing: existingReview?.comment,
         });
       }}
       style={{ marginBottom: 10 }}
@@ -68,21 +68,19 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     let currentRenders = pageRenders;
 
     setTimeout(() => {
-      if (pageRenders === currentRenders) {
-        getReviews(userID, page * OFFSET).then((fetchedReviews: ReviewType[] | undefined ) => {
-          if (fetchedReviews) {
-            if (shouldKill) return;
-            if (fetchedReviews.length <= 0 && page !== 0) {
-              Toasts.open({ content: "Exceeded maximum pages! Returning to 1.", source: Icons.Warning });
-              return setPage(0);
-            };
-    
-            setReviews(fetchedReviews);
-            !existingReview && setExistingReview(fetchedReviews?.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
-            pageRenders = 0;
-          }
-        })
-      }
+      pageRenders === currentRenders && getReviews(userID, page * OFFSET).then((fetchedReviews: ReviewType[] | undefined ) => {
+        if (fetchedReviews) {
+          if (shouldKill) return;
+          if (fetchedReviews.length <= 0 && page !== 0) {
+            Toasts.open({ content: "Exceeded maximum pages! Returning to 1.", source: Icons.Warning });
+            return setPage(0);
+          };
+  
+          setReviews(fetchedReviews);
+          !existingReview && setExistingReview(fetchedReviews.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
+          pageRenders = 0;
+        }
+      })
     }, 300);
     
     return () => (shouldKill = true) && void 0;
@@ -93,18 +91,20 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     <Button 
       text={"Refresh Reviews"} 
       image={"ic_message_retry"} 
-      onPress={() => setPage(previousPage => previousPage)} 
-      style={{
-        marginVertical: 0
-      }}
+      onPress={() => {
+        setPage(previousPage => previousPage)
+        Toasts.open({
+          content: `Refreshed reviews at page ${page + 1}!`,
+          source: Icons.Success
+        })
+      }} 
+      style={{ marginVertical: 0 }}
       innerStyle={{
         height: "auto",
         paddingBottom: 12,
         marginTop: -4
       }}
-      textStyle={{
-        fontSize: 12
-      }}
+      textStyle={{ fontSize: 12 }}
       dangerous
     />
     <View style={{ flexDirection: "row", marginHorizontal: 12 }}>

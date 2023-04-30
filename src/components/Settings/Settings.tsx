@@ -1,19 +1,19 @@
 import { version } from 'enmity/api/native';
 import { get, set } from 'enmity/api/settings';
-import { FormDivider, FormInput, FormRow, ScrollView, Text, View } from 'enmity/components';
+import { FormDivider, FormInput, FormRow, FormSwitch, ScrollView, Text, View } from 'enmity/components';
 import { getByProps } from 'enmity/metro';
 import { React } from 'enmity/metro/common';
-import { Icons, Updater } from '../../common';
+import { Icons, Miscellaneous, Updater } from '../../common';
 import styles from '../../common/StyleSheet';
 import { SettingsProps } from '../../def';
 import Credits from '../Dependent/Credits';
 import SectionWrapper from '../Wrappers/SectionWrapper';
-import { OAuth2Modal } from '../../common/RDBAPI';
+import { OAuth2Modal, showOAuth2Modal } from '../../common/RDBAPI';
 
 const Router = getByProps("openURL", "transitionToGuild");
 const optionalMargin = parseInt(version.split(".")[0]) > 163 ? 15 : 0;
 
-export default ({ manifest, renderPage }: SettingsProps) => {
+export default ({ manifest }: SettingsProps) => {
   return <ScrollView>
     <Credits manifest={manifest} />
     <SectionWrapper label="Authentication">
@@ -26,10 +26,7 @@ export default ({ manifest, renderPage }: SettingsProps) => {
           trailing={<FormRow.Arrow style={{ marginLeft: -optionalMargin }} />}
           // @ts-ignore
           leading={<FormRow.Icon source={Icons.Self} />}
-          onPress={() => renderPage(null, {
-            pageName: "",
-            pagePanel: OAuth2Modal
-          })}
+          onPress={() => showOAuth2Modal({ pagePanel: OAuth2Modal })}
         />
         <FormDivider />
         <FormInput
@@ -39,6 +36,20 @@ export default ({ manifest, renderPage }: SettingsProps) => {
             ? set(manifest.name, "rdbToken", value.trim())
             : set(manifest.name, "rdbToken", ""))}
           title="ReviewDB Authentication Token"
+        />
+      </View>
+    </SectionWrapper>
+    <SectionWrapper label="Preferences">
+      <View style={styles.formrowContainer}>
+        <FormRow
+          label='Show warning'
+          leading={<FormRow.Icon style={styles.icon} source={Icons.Warning} />}
+          subLabel={`Display warning to be respectful to other users at the top of the review list`}
+          onLongPress={() => Miscellaneous.displayToast('Shows a warning at the top of the reviews list reminding you to be respectful to other users.', 'tooltip')}
+          trailing={() => <FormSwitch
+              value={get(manifest.name, "showWarning", true)}
+              onValueChange={(value) => set(manifest.name, "showWarning", value)}
+          />}
         />
       </View>
     </SectionWrapper>

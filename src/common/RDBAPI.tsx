@@ -24,7 +24,6 @@ const checkToken = (): boolean => {
       // run the install function
       onConfirm: () => {
         showOAuth2Modal({
-          pageName: "",
           pagePanel: OAuth2Modal
         });
         isShowing = false;
@@ -71,7 +70,7 @@ export const OAuth2Modal = () => <OAuth2AuthorizeModal
   dismissOAuthModal={() => Navigation.pop()}
 />
 
-export const showOAuth2Modal = ({ pageName, pagePanel }) => 
+export const showOAuth2Modal = ({ pagePanel }) => 
   get(manifest.name, "rdbToken", "") == ""
     ? Navigation.push(Page, {
       component: pagePanel
@@ -84,9 +83,15 @@ export const showOAuth2Modal = ({ pageName, pagePanel }) =>
 
 export async function getReviews(userID: string, offset: number) {
   try {
-    const res = await fetch(`${manifest.links.api}/api/reviewdb/users/${userID}/reviews?offset=${offset}`, {
-      method: "GET",
-    });
+    let flags = 0;
+    if (!get(manifest.name, "showWarning", true)) flags |= 0b00000010;
+    
+    const res = await fetch(
+      `${manifest.links.api}/api/reviewdb/users/${userID}/reviews?offset=${offset}&flags=${flags}`, 
+      {
+        method: "GET",
+      }
+    );
 
     const { reviews, success, message }: Endpoint = await res.json();
 
@@ -170,16 +175,6 @@ export async function reportReview(id: number) {
     source: Icons.Success,
   });
 }
-
-/**
- * coming to an update near you: new review notifications
- * eta? idk
- */
-// export function getLastReviewID(userID: string) {
-//   return fetch(manifest.API_URL + "/getLastReviewID?discordid=" + userID)
-//     .then(r => r.text())
-//     .then(Number);
-// }
 
 export const canDeleteReview = (
   review: Review,

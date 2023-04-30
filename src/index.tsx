@@ -9,7 +9,6 @@ import { Icons } from "./common";
 import { Badge as BadgeType, PossibleBadgeProps, User } from "./def";
 import { Badge } from "./components/Dependent/Badge";
 import Reviews from "./components/Reviews/Reviews";
-import { showOAuth2Modal } from "./common/RDBAPI";
 import Settings from "./components/Settings/Settings";
 import { build } from "enmity/api/native";
 import { View } from "enmity/components";
@@ -35,19 +34,8 @@ const ensureCurrentUserInitialized = () => {
   }, 25);
 }
 
-type ReviewDBPlugin = {
-  renderPage: (navigation: any, { pageName, pagePanel }: { pageName: string, pagePanel: any }) => any;
-} & Plugin
-
-const ReviewDB: ReviewDBPlugin = {
+const ReviewDB: Plugin = {
   ...manifest,
-
-  renderPage(_, { pageName, pagePanel }) {
-    return showOAuth2Modal({
-      pageName,
-      pagePanel
-    })
-  },
 
   async onStart() {
     ensureCurrentUserInitialized();
@@ -174,7 +162,7 @@ const ReviewDB: ReviewDBPlugin = {
   },
 
   getSettingsPanel({ settings }): any {
-    return <Settings manifest={manifest} settings={settings} renderPage={ReviewDB.renderPage} />;
+    return <Settings manifest={manifest} settings={settings} />;
   },
 };
 
