@@ -95,7 +95,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       image={"ic_message_retry"} 
       onPress={() => {
         setReviews([]);
-        setPage(previous => previous);
+        setPage(page);
       }} 
       style={{
         marginVertical: 0

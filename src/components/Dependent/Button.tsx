@@ -10,7 +10,6 @@ const { meta: { resolveSemanticColor } } = getByProps("colors", "meta");
 const { ProfileGradientCard } = getByProps("ProfileGradientCard");
 const { triggerHaptic } = getByProps("triggerHaptic");
 
-
 const _Button = ({ onPress, innerStyle, textStyle, dangerous, contextStyles, text, image, disabled, useImage = true, useText = true, textDirection = "right" }: ButtonProps & { contextStyles: Record<string, any> }) => {
   const RenderableText = useText && text && typeof text === "string" 
     ? () => <Text style={[
