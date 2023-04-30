@@ -94,7 +94,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       onPress={() => {
         setPage(previousPage => previousPage)
         Toasts.open({
-          content: `Refreshed reviews at page ${page + 1}!`,
+          content: `Refreshed reviews at Page ${page + 1}!`,
           source: Icons.Success
         })
       }} 
