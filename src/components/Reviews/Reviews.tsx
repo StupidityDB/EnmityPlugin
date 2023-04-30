@@ -93,10 +93,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     <Button 
       text={"Refresh Reviews"} 
       image={"ic_message_retry"} 
-      onPress={() => {
-        setReviews([]);
-        setPage(page);
-      }} 
+      onPress={() => setPage(previousPage => previousPage)} 
       style={{
         marginVertical: 0
       }}
