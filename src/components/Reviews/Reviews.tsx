@@ -1,7 +1,7 @@
 import { get } from "enmity/api/settings";
 import { Text, View } from 'enmity/components';
 import { getByName, getByProps } from "enmity/metro";
-import { Profiles, React, Toasts, Users } from "enmity/metro/common";
+import { Constants, Profiles, React, Toasts, Users } from "enmity/metro/common";
 import manifest from "../../../manifest.json";
 import { Icons } from "../../common";
 import { addReview, getReviews } from '../../common/RDBAPI';
@@ -14,6 +14,8 @@ import ReviewActionSheet, { renderActionSheet } from "./ReviewActionSheet";
 
 const LazyActionSheet = getByProps("openLazy", "hideActionSheet");
 const UserProfileSection = getByName("UserProfileSection");
+const { useThemeContext } = getByProps("useThemeContext");
+const { meta: { resolveSemanticColor } } = getByProps("colors", "meta");
 const { FlatList } = getByProps("FlatList");
 const OFFSET = 50;
 
@@ -59,6 +61,21 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
   const [page, setPage] = React.useState<number>(0);
   const [reviews, setReviews] = React.useState<Array<ReviewType>>([]);
   const [existingReview, setExistingReview] = React.useState<any>(null);
+  const themeContext = useThemeContext();
+  const contextStyles = {
+    author: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
+    },
+    timestamp: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
+    },
+    system: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_MUTED)
+    },
+    content: {
+      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_NORMAL)
+    }
+  }
   let pageRenders = 0;
   
   React.useEffect(() => {
@@ -147,6 +164,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
                 review: item, currentUserID, admins
               })
             }
+            contextStyles={contextStyles}
           />}
           keyExtractor={(review: ReviewType) => review.id.toString()}
         />

@@ -8,32 +8,12 @@ import { ReviewProps } from "../../def";
 const [
   { ProfileGradientCard }, // used to render a card with the external colors being the user's profile theme. requires padding tobe set as a result.
   ProfileFetcher,
-  { useThemeContext },
-  { meta: { resolveSemanticColor } }
 ] = bulk(
   filters.byProps("ProfileGradientCard"),
-  filters.byProps("fetchProfile"),
-  filters.byProps("useThemeContext"),
-  filters.byProps("colors", "meta")
+  filters.byProps("fetchProfile")
 );
 
-export default ({ review, onSubmit }: ReviewProps) => {
-  const themeContext = useThemeContext();
-  const contextStyles = {
-    author: {
-      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
-    },
-    timestamp: {
-      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.HEADER_PRIMARY)
-    },
-    system: {
-      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_MUTED)
-    },
-    content: {
-      color: resolveSemanticColor(themeContext.theme, Constants.ThemeColorMap.TEXT_NORMAL)
-    }
-  }
-
+export default ({ review, onSubmit, contextStyles }: ReviewProps) => {
   const [formattedTime, setFormattedTime] = React.useState<string>();
 
   React.useEffect(() => {

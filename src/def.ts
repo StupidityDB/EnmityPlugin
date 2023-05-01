@@ -78,6 +78,7 @@ export interface CreditsProps {
 export interface ReviewProps {
     review: Review;
     onSubmit: Function;
+    contextStyles: Record<string, any>
 }
 
 export interface ReviewActionSheetProps {
