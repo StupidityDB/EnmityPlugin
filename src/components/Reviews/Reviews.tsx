@@ -93,7 +93,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
             return setPage(0);
           };
   
-          setReviews(fetchedReviews);
+          setReviews(fetchedReviews.reverse());
           !existingReview && setExistingReview(fetchedReviews.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
           pageRenders = 0;
         }
