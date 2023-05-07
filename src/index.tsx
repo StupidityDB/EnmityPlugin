@@ -16,30 +16,14 @@ import { View } from "enmity/components";
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
 const UserProfileName = getByName("UserProfileName");
+const FluxDispatcher = getByProps("_currentDispatchActionType");
 const OldBadges = getByName('ProfileBadges', { all: true, default: false });
 const NewBadges = getByName("ProfileBadges", { default: false });
-
-let currentUserID = get(manifest.name, "currentUser", undefined) as string | undefined;
-let currentUserAttempts = 0;
-
-const ensureCurrentUserInitialized = () => {
-  if (currentUserID || currentUserAttempts >= 20) return;
-  currentUserAttempts++;
-
-  setTimeout(() => {
-    currentUserID = Users.getCurrentUser().id;
-    if (!currentUserID) return ensureCurrentUserInitialized();
-
-    set(manifest.name, "currentUser", currentUserID);
-  }, 25);
-}
 
 const ReviewDB: Plugin = {
   ...manifest,
 
   async onStart() {
-    ensureCurrentUserInitialized();
-
     const admins: string[] = await fetch(manifest.links.api + "/admins")
       .then(res => res.json());
 
@@ -138,23 +122,36 @@ const ReviewDB: Plugin = {
       };
     }
 
-    // patches profile section to add reviews section to the bottom
-    Patcher.after(UserProfile.default, "type", (_, __, res) => {
-      const profileCardActionsSection = findInReactTree(res, r =>
-        r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")
-        && !r?.props.children.find((e: any) => e.type === UserProfileName)
-        && r?.type?.displayName === "View"
-        && Array?.isArray(r?.props?.style)
-      )?.props?.children;
+    const PatchProfileSection = () => {
+      // patches profile section to add reviews section to the bottom
+      Patcher.after(UserProfile.default, "type", (_, __, res) => {
+        const profileCardActionsSection = findInReactTree(res, r =>
+          r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")
+          && !r?.props.children.find((e: any) => e.type === UserProfileName)
+          && r?.type?.displayName === "View"
+          && Array?.isArray(r?.props?.style)
+        )?.props?.children;
 
-      if (!profileCardActionsSection) return res;
+        if (!profileCardActionsSection) return res;
 
-      const { userId } = profileCardActionsSection?.find((r: any) => typeof r?.props?.displayProfile?.userId === "string")
-        ?.props?.displayProfile ?? {};
+        const { userId } = profileCardActionsSection?.find((r: any) => typeof r?.props?.displayProfile?.userId === "string")
+          ?.props?.displayProfile ?? {};
 
-      if (!userId) return res;
-      profileCardActionsSection?.push(<Reviews userID={userId} currentUserID={currentUserID as string} admins={admins} />);
-    });
+        if (!userId) return res;
+        profileCardActionsSection?.push(<Reviews userID={userId} currentUserID={Users.getCurrentUser()} admins={admins} />);
+      });
+    }
+
+    if (Users.getCurrentUser()) {
+      PatchProfileSection()
+    } else {
+      function event() {
+        FluxDispatcher.unsubscribe("CONNECTION_OPEN", event);
+        PatchProfileSection();
+      };
+
+      FluxDispatcher.subscribe("CONNECTION_OPEN", event);
+    }
   },
 
   onStop() {

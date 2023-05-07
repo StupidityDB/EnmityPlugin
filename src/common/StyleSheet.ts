@@ -9,6 +9,7 @@ const styles = StyleSheet.createThemedStyleSheet({
   container: {
     marginTop: 12,
     marginLeft: 12,
+    marginBottom: 4,
     alignSelf: 'flex-start',
     width: "95%"
   },
