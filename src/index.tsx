@@ -65,7 +65,7 @@ const ReviewDB: Plugin = {
                 : 22
               : 16}
             margin={Array.isArray(style)
-              ? 3
+              ? 4
               : 8}
           />;
 
@@ -81,13 +81,6 @@ const ReviewDB: Plugin = {
           image: badgeObject?.icon
         });
       });
-
-      const possibleAuthor = manifest.authors.find(author => author.id === id);
-      pushBadge({
-        ensure: Boolean(possibleAuthor),
-        name: "Enmity ReviewDB Developer",
-        image: possibleAuthor?.icon
-      })
     }
 
     if (build >= "42235") {
