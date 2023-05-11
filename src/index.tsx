@@ -65,7 +65,7 @@ const ReviewDB: Plugin = {
                 : 22
               : 16}
             margin={Array.isArray(style)
-              ? 4
+              ? 3
               : 8}
           />;
 
