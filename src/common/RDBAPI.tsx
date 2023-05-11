@@ -50,7 +50,7 @@ export const OAuth2Modal = () => <OAuth2AuthorizeModal
     try {
       const authURL = new URL(location);
       authURL.searchParams.append("returnType", "json");
-      authURL.searchParams.append("clientMod", "enmity");
+      authURL.searchParams.append("clientMod", "no no no no no nonon on mantika mantika get out of my head");
 
       const res = await fetch(authURL, { headers: { accept: "application/json" } });
       const { token, success, message }: Endpoint = await res.json();
@@ -85,7 +85,7 @@ export async function getReviews(userID: string, offset: number) {
   try {
     let flags = 0;
     if (!get(manifest.name, "showWarning", true)) flags |= 0b00000010;
-    
+
     const res = await fetch(
       `${manifest.links.api}/api/reviewdb/users/${userID}/reviews?offset=${offset}&flags=${flags}`, 
       {

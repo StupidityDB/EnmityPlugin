@@ -13,7 +13,7 @@ export const Badge = ({ name, image, size, margin }: { name: string, image?: str
             height: size,
             resizeMode: "contain",
             marginLeft: margin,
-            marginRight: margin + 1
+            marginRight: margin
         }
     };
 
