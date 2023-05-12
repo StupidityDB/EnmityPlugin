@@ -50,7 +50,7 @@ export const OAuth2Modal = () => <OAuth2AuthorizeModal
     try {
       const authURL = new URL(location);
       authURL.searchParams.append("returnType", "json");
-      authURL.searchParams.append("clientMod", "no no no no no nonon on mantika mantika get out of my head");
+      authURL.searchParams.append("clientMod", "enmity");
 
       const res = await fetch(authURL, { headers: { accept: "application/json" } });
       const { token, success, message }: Endpoint = await res.json();
