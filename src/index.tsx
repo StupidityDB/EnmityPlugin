@@ -119,10 +119,8 @@ const ReviewDB: Plugin = {
       // patches profile section to add reviews section to the bottom
       Patcher.after(UserProfile.default, "type", (_, __, res) => {
         const profileCardActionsSection = findInReactTree(res, r =>
-          r?.props?.children.find((res: any) => typeof res?.props?.displayProfile?.userId === "string")
-          && !r?.props.children.find((e: any) => e.type === UserProfileName)
-          && r?.type?.displayName === "View"
-          && Array?.isArray(r?.props?.style)
+          r?.type?.displayName === "View" &&
+          r?.props?.children.findIndex(i => i?.type?.name === "UserProfileBio") !== -1
         )?.props?.children;
 
         if (!profileCardActionsSection) return res;
