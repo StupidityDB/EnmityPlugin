@@ -129,7 +129,7 @@ const ReviewDB: Plugin = {
           ?.props?.displayProfile ?? {};
 
         if (!userId) return res;
-        profileCardActionsSection?.push(<Reviews userID={userId} currentUserID={Users.getCurrentUser()} admins={admins} />);
+        profileCardActionsSection?.push(<Reviews userID={userId} currentUserID={Users.getCurrentUser().id} admins={admins} />);
       });
     }
 
