@@ -150,7 +150,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
         style={{ flex: 0.3, marginLeft: 12 }}
         useGradient
         textDirection={"left"}
-        disabled={(page * OFFSET) > (data.reviewCount ?? 0)}
+        disabled={((page + 1) * OFFSET) > (data.reviewCount ?? 0)}
         textStyle={{ fontSize: 16, marginLeft: 4 }}
       />
     </View>
