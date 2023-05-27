@@ -59,7 +59,7 @@ const ReviewButton = ({ existingReview, userID }) => {
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
   const [page, setPage] = React.useState<number>(0);
-  const [reviews, setReviews] = React.useState<Array<ReviewType>>([]);
+  const [data, setData] = React.useState<{ reviews: Array<ReviewType>, reviewCount?: number }>({ reviews: [] });
   const [existingReview, setExistingReview] = React.useState<any>(null);
   const themeContext = useThemeContext();
   const contextStyles = {
@@ -85,15 +85,16 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     let currentRenders = pageRenders;
 
     setTimeout(() => {
-      pageRenders === currentRenders && getReviews(userID, page * OFFSET).then(({ reviews, reviewCount }) => {
-        if (reviews) {
+      pageRenders === currentRenders && getReviews(userID, page * OFFSET).then(res => {
+        if (res?.reviews) {
+          const { reviews, reviewCount } = res;
           if (shouldKill) return;
-          if ((page * OFFSET) > reviewCount) {
+          if ((page * OFFSET) > (reviewCount ?? 0)) {
             Toasts.open({ content: "Exceeded maximum pages! Returning to 1.", source: Icons.Warning });
             return setPage(0);
           };
   
-          setReviews(reviews);
+          setData({ reviews, reviewCount });
           !existingReview && setExistingReview(reviews.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
           pageRenders = 0;
         }
@@ -145,18 +146,18 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       <Button 
         text={"Next"} 
         image="ic_arrow_forward_24px" 
-        onPress={() => setPage(prevPage => reviews.length >= OFFSET ? prevPage + 1 : prevPage)} 
+        onPress={() => setPage(prevPage => data.reviews.length >= OFFSET ? prevPage + 1 : prevPage)} 
         style={{ flex: 0.3, marginLeft: 12 }}
         useGradient
         textDirection={"left"}
-        disabled={reviews.length < OFFSET}
+        disabled={(page * OFFSET) > (data.reviewCount ?? 0)}
         textStyle={{ fontSize: 16, marginLeft: 4 }}
       />
     </View>
     <View style={styles.container}>
-      {reviews && reviews.length > 0
+      {data.reviews && data.reviews.length > 0
         ? <FlatList 
-          data={reviews}
+          data={data.reviews}
           renderItem={({ item }) => <Review
             review={item}
             onSubmit={() => renderActionSheet(ReviewActionSheet, {
@@ -177,6 +178,6 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
           No reviews yet. You could be the first!
         </Text>}
     </View>
-    {reviews && reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
+    {data.reviews && data.reviews.length > 5 && <ReviewButton existingReview={existingReview} userID={userID} />}
   </UserProfileSection>
 }
