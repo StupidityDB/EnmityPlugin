@@ -85,16 +85,16 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
     let currentRenders = pageRenders;
 
     setTimeout(() => {
-      pageRenders === currentRenders && getReviews(userID, page * OFFSET).then((fetchedReviews: ReviewType[] | undefined ) => {
-        if (fetchedReviews) {
+      pageRenders === currentRenders && getReviews(userID, page * OFFSET).then(({ reviews, reviewCount }) => {
+        if (reviews) {
           if (shouldKill) return;
-          if (fetchedReviews.length <= 0 && page !== 0) {
+          if ((page * OFFSET) > reviewCount) {
             Toasts.open({ content: "Exceeded maximum pages! Returning to 1.", source: Icons.Warning });
             return setPage(0);
           };
   
-          setReviews(fetchedReviews.reverse());
-          !existingReview && setExistingReview(fetchedReviews.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
+          setReviews(reviews);
+          !existingReview && setExistingReview(reviews.find((review: ReviewType) => review["sender"]["discordID"] === currentUserID));
           pageRenders = 0;
         }
       })

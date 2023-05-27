@@ -93,10 +93,10 @@ export async function getReviews(userID: string, offset: number) {
       }
     );
 
-    const { reviews, success, message }: Endpoint = await res.json();
+    const { reviews, reviewCount, message }: Endpoint = await res.json();
 
-    if (success) {
-      return reviews;
+    if (res.ok) {
+        return { reviews, reviewCount };
     }
 
     throw new Error("Error when getting reviews: " + message);

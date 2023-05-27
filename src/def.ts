@@ -16,6 +16,7 @@ export interface Endpoint {
     success: boolean;
     message: string;
     reviews?: Review[];
+    reviewCount?: number;
     token?: string;
 }
 
