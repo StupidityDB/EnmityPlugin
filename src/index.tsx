@@ -15,7 +15,6 @@ import { View } from "enmity/components";
 
 const Patcher = create(manifest.name);
 const UserProfile = getByProps("PRIMARY_INFO_TOP_OFFSET", "SECONDARY_INFO_TOP_MARGIN", "SIDE_PADDING");
-const UserProfileName = getByName("UserProfileName");
 const FluxDispatcher = getByProps("_currentDispatchActionType");
 const OldBadges = getByName('ProfileBadges', { all: true, default: false });
 const NewBadges = getByName("ProfileBadges", { default: false });

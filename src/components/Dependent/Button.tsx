@@ -7,7 +7,7 @@ import { getByProps } from 'enmity/metro';
 
 const { useThemeContext } = getByProps("useThemeContext");
 const { meta: { resolveSemanticColor } } = getByProps("colors", "meta");
-const { ProfileGradientCard } = getByProps("ProfileGradientCard");
+const { UserProfileGradientCard } = getByProps("UserProfileGradientCard");
 const { triggerHaptic } = getByProps("triggerHaptic");
 
 const _Button = ({ onPress, innerStyle, textStyle, dangerous, contextStyles, text, image, disabled, useImage = true, useText = true, textDirection = "right" }: ButtonProps & { contextStyles: Record<string, any> }) => {
@@ -86,10 +86,10 @@ export default function Button({ text, image = "ic_new_group", dangerous, onPres
   />
 
   return useGradient 
-      ? <ProfileGradientCard 
+      ? <UserProfileGradientCard 
         style={[contextStyles.container, style]} 
         fallbackBackground={styles.fallback.color}>
         <RenderableButton />  
-      </ProfileGradientCard> 
+      </UserProfileGradientCard> 
       :  <RenderableButton />  
 };

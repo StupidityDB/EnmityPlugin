@@ -59,6 +59,7 @@ const ReviewButton = ({ existingReview, userID }) => {
 
 export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [] }: ReviewsSectionProps) => {
   const [page, setPage] = React.useState<number>(0);
+  const [, forceRender] = React.useState<number>(0);
   const [data, setData] = React.useState<{ reviews: Array<ReviewType>, reviewCount?: number }>({ reviews: [] });
   const [existingReview, setExistingReview] = React.useState<any>(null);
   const themeContext = useThemeContext();
@@ -110,7 +111,7 @@ export default ({ userID, currentUserID = Users.getCurrentUser()?.id, admins = [
       text={"Refresh Reviews"} 
       image={"ic_message_retry"} 
       onPress={() => {
-        setPage(previousPage => previousPage)
+        forceRender(p => p + 1);
         Toasts.open({
           content: `Refreshed reviews at Page ${page + 1}!`,
           source: Icons.Success
